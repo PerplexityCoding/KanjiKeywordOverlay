@@ -16,23 +16,25 @@ from kol.AnkiHelper import *
 
 class KanjiOverlay:
     
-    ############################## CUSTOMIZE ###############################################
+    ################# CUSTOMIZE ###################
     Profiles = {
-        "DEFAULT" : { #Profile par default
-            "KanjiUseCustomDeck" : False,
+        "DEFAULT" : { #Profile by default
+            "KanjiUseCustomDeck" : True,
             "KanjiCustomDeckName" : u'日本語::漢字::意味', 
             "KanjiCustomExpression" : "Expression",
-            "KanjiCustomKeyword" : "French Keyword"
+            "KanjiCustomKeyword" : "French Keyword",
+            "KanjiDisplayWithFuriganaMod" : True
         },
         "FanAtiC" : { #Other Profile Name
             "KanjiUseCustomDeck" : True,
             "KanjiCustomDeckName" : u'日本語::漢字::意味',
             "KanjiCustomExpression" : "Expression",
-            "KanjiCustomKeyword" : "French Keyword"
+            "KanjiCustomKeyword" : "French Keyword",
+            "KanjiDisplayWithFuriganaMod" : True
         }
         # Add other Profile name
     }
-    ########################################################################################
+    ################################################
 
     def load(self):
         
@@ -46,6 +48,7 @@ class KanjiOverlay:
             self.KanjiDeckName = profileVar["KanjiCustomDeckName"]
             self.KanjiExpression = profileVar["KanjiCustomExpression"]
             self.KanjiKeyword = profileVar["KanjiCustomKeyword"]
+            self.KanjiDisplayWithFuriganaMod = profileVar["KanjiDisplayWithFuriganaMod"]
         
         self.kanjiCustomDictPath = kanjiCustomDictPath = os.path.join(mw.pm.profileFolder(), 'custom-kol.db')
         self.kanjiDefaultDictPath = kanjiDefaultDictPath = os.path.join(mw.pm.addonFolder(), 'kol', 'english-kol.db')
@@ -68,6 +71,9 @@ class KanjiOverlay:
             mod, self.kanjiDict = pickle.load(kanjiFile)
 
         addHook('fmod_kol', self.injectKanjiOverlay)
+        if self.KanjiDisplayWithFuriganaMod:
+            addHook('fmod_furigana', self.injectKanjiOverlay)
+            addHook('fmod_kanji', self.injectKanjiOverlay)
         
         log("End Load Plugin")
         
