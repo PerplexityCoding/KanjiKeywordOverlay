@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Advanced Filter" default="all" basedir=".">
+
+	<property name="anki.plugin.path" value="C:\Users\fanfan\Documents\Anki\addons"/>
+
+	<target name="all" depends="">
+		<copy todir="${anki.plugin.path}">
+			<fileset file="${basedir}/Kanji Keyword Overlay.py" />
+		</copy>
+	</target>
+
+</project>
