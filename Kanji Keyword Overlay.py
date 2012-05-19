@@ -17,18 +17,38 @@ from kko.AnkiHelper import *
 class KanjiKeywordOverlay:
     
     ############################## CUSTOMIZE ###############################################
-    KanjiUseCustomDeck = False
-    KanjiDeckName = u'日本語::漢字::意味'
-    KanjiExpression = "Expression"
-    KanjiKeyword = "French Keyword"
+    Profiles = {
+        "DEFAULT" : { #Profile par default
+            "KanjiUseCustomDeck" : False,
+            "KanjiCustomDeckName" : u'日本語::漢字::意味', 
+            "KanjiCustomExpression" : "Expression",
+            "KanjiCustomKeyword" : "French Keyword"
+        },
+        "FanAtiC" : { #Other Profile Name
+            "KanjiUseCustomDeck" : True,
+            "KanjiCustomDeckName" : u'日本語::漢字::意味',
+            "KanjiCustomExpression" : "Expression",
+            "KanjiCustomKeyword" : "French Keyword"
+        }
+        # Add other Profile name
+    }
     ########################################################################################
 
     def load(self):
         
         log("Load Plugin")
         
-        self.kanjiCustomDictPath = kanjiCustomDictPath = os.path.join(mw.pm.profileFolder(), 'custom-kk.db')
-        self.kanjiDefaultDictPath = kanjiDefaultDictPath = os.path.join(mw.pm.addonFolder(), 'kko', 'english-kk.db')
+        profileName = mw.pm.name
+        pf = self.Profiles
+        profileVar = pf["DEFAULT"] if not profileName in pf else pf[profileName]
+        self.KanjiUseCustomDeck = profileVar["KanjiUseCustomDeck"]
+        if self.KanjiUseCustomDeck:
+            self.KanjiDeckName = profileVar["KanjiCustomDeckName"]
+            self.KanjiExpression = profileVar["KanjiCustomExpression"]
+            self.KanjiKeyword = profileVar["KanjiCustomKeyword"]
+        
+        self.kanjiCustomDictPath = kanjiCustomDictPath = os.path.join(mw.pm.profileFolder(), 'custom-ko.db')
+        self.kanjiDefaultDictPath = kanjiDefaultDictPath = os.path.join(mw.pm.addonFolder(), 'kko', 'english-ko.db')
         self.kanjiDict = None
         
         if self.KanjiUseCustomDeck:            
