@@ -12,9 +12,9 @@ from aqt import mw
 from anki.hooks import addHook
 from anki.utils import ids2str
 
-from kko.AnkiHelper import *
+from kol.AnkiHelper import *
 
-class KanjiKeywordOverlay:
+class KanjiOverlay:
     
     ############################## CUSTOMIZE ###############################################
     Profiles = {
@@ -47,8 +47,8 @@ class KanjiKeywordOverlay:
             self.KanjiExpression = profileVar["KanjiCustomExpression"]
             self.KanjiKeyword = profileVar["KanjiCustomKeyword"]
         
-        self.kanjiCustomDictPath = kanjiCustomDictPath = os.path.join(mw.pm.profileFolder(), 'custom-ko.db')
-        self.kanjiDefaultDictPath = kanjiDefaultDictPath = os.path.join(mw.pm.addonFolder(), 'kko', 'english-ko.db')
+        self.kanjiCustomDictPath = kanjiCustomDictPath = os.path.join(mw.pm.profileFolder(), 'custom-kol.db')
+        self.kanjiDefaultDictPath = kanjiDefaultDictPath = os.path.join(mw.pm.addonFolder(), 'kol', 'english-kol.db')
         self.kanjiDict = None
         
         if self.KanjiUseCustomDeck:            
@@ -67,7 +67,7 @@ class KanjiKeywordOverlay:
             kanjiFile = open(kanjiDefaultDictPath, "rb")
             mod, self.kanjiDict = pickle.load(kanjiFile)
 
-        addHook('fmod_kko', self.injectKanjiOverlay)
+        addHook('fmod_kol', self.injectKanjiOverlay)
         
         log("End Load Plugin")
         
@@ -78,8 +78,8 @@ class KanjiKeywordOverlay:
                     if c in self.kanjiDict:
                         kw, ivl = self.kanjiDict.get(c)
                         unkown = " unknown" if ivl <= 0 and self.KanjiUseCustomDeck else ""
-                        yield '<span class="kko%s" title="%s">%s</span>' % (unkown, kw, c)
-                    else: yield '<span class="kko missing">%s</span>' % (c)
+                        yield '<span class="kol%s" title="%s">%s</span>' % (unkown, kw, c)
+                    else: yield '<span class="kol missing">%s</span>' % (c)
                 else: yield c
         return ''.join([x for x in remap()])
 
@@ -100,13 +100,13 @@ class KanjiKeywordOverlay:
         return kanjiDict
     
 def log(msg):
-    logPath = os.path.join(mw.pm.addonFolder(), 'kko', 'main.log')
+    logPath = os.path.join(mw.pm.addonFolder(), 'kol', 'main.log')
     txt = '%s: %s' % (datetime.datetime.now(), msg)
     f = codecs.open(logPath, 'a', 'utf-8')
     f.write(txt + '\n')
     f.close()
     print txt
 
-kanji = KanjiKeywordOverlay()
+kanji = KanjiOverlay()
 addHook("profileLoaded", kanji.load)
 
