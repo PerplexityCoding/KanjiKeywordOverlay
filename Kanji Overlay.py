@@ -1,16 +1,22 @@
 #-*- coding: utf-8 -*-
 #
-# Kanji Keyword Overlay
+# Kanji Overlay Anki Plugin
+#
+# Comments & Suggestions at: fanatic84@gmail.com
+#
+# Use at your own Risk :) 
 #
 # Insperated from the Work of Brian Bush on Anki v1 plugin, thank you very much
+# Thanks for Roland Sieker <ospalh@gmail.com> and his plugin Local css for Anki 2
 #
 
-import os, pickle, datetime, codecs
+import os, pickle, datetime, codecs, shutil
 
 from aqt import mw
 
 from anki.hooks import addHook
 from anki.utils import ids2str
+from anki.cards import Card
 
 from kol.AnkiHelper import *
 
@@ -52,6 +58,8 @@ class KanjiOverlay:
         
         self.kanjiCustomDictPath = kanjiCustomDictPath = os.path.join(mw.pm.profileFolder(), 'custom-kol.db')
         self.kanjiDefaultDictPath = kanjiDefaultDictPath = os.path.join(mw.pm.addonFolder(), 'kol', 'english-kol.db')
+        self.cssFileInPlugin = os.path.join(mw.pm.addonFolder(), 'kol', 'default-kol.css')
+        self.cssFileInProfile = os.path.join(mw.pm.profileFolder(), 'custom-kol.css')
         self.kanjiDict = None
         
         if self.KanjiUseCustomDeck:            
@@ -70,12 +78,32 @@ class KanjiOverlay:
             kanjiFile = open(kanjiDefaultDictPath, "rb")
             mod, self.kanjiDict = pickle.load(kanjiFile)
 
+        # Add CSS
+        if not os.path.exists(self.cssFileInProfile):
+            shutil.copy2(self.cssFileInPlugin, self.cssFileInProfile)
+            
+        KanjiOverlay.css = self.loadCss()
+        KanjiOverlay.oldCss = Card.css
+        Card.css = injectCss
+
         addHook('fmod_kol', self.injectKanjiOverlay)
         if self.KanjiDisplayWithFuriganaMod:
             addHook('fmod_furigana', self.injectKanjiOverlay)
             addHook('fmod_kanji', self.injectKanjiOverlay)
         
         log("End Load Plugin")
+    
+    def loadCss(self):
+        try:
+            f = open(self.cssFileInProfile, 'r')
+            css = unicode(f.read(), 'utf-8')
+            f.close()
+        except:
+            css = u''
+        return css
+    
+    def unload(self):
+        Card.css = KanjiOverlay.oldCss
         
     def injectKanjiOverlay(self, txt, *args):
         def remap():
@@ -84,8 +112,8 @@ class KanjiOverlay:
                     if c in self.kanjiDict:
                         kw, ivl = self.kanjiDict.get(c)
                         unkown = " unknown" if ivl <= 0 and self.KanjiUseCustomDeck else ""
-                        yield '<span class="kol%s" title="%s">%s</span>' % (unkown, kw, c)
-                    else: yield '<span class="kol missing">%s</span>' % (c)
+                        yield '<span class="kol%s">%s<span>%s</span></span>' % (unkown, c, kw)
+                    else: yield '<span class="kol-missing">%s</span>' % (c)
                 else: yield c
         return ''.join([x for x in remap()])
 
@@ -105,14 +133,16 @@ class KanjiOverlay:
         
         return kanjiDict
     
+def injectCss(self):
+    return '<style>%s</style>' % KanjiOverlay.css + KanjiOverlay.oldCss(self)
+    
 def log(msg):
     logPath = os.path.join(mw.pm.addonFolder(), 'kol', 'main.log')
     txt = '%s: %s' % (datetime.datetime.now(), msg)
     f = codecs.open(logPath, 'a', 'utf-8')
     f.write(txt + '\n')
     f.close()
-    print txt
 
 kanji = KanjiOverlay()
 addHook("profileLoaded", kanji.load)
-
+addHook("unloadProfile", kanji.unload)
