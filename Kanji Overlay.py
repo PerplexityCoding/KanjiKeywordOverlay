@@ -25,10 +25,10 @@ class KanjiOverlay:
     ################# CUSTOMIZE ###################
     Profiles = {
         "DEFAULT" : { #Profile by default
-            "KanjiUseCustomDeck" : True,
-            "KanjiCustomDeckName" : u'日本語::漢字::意味', 
-            "KanjiCustomExpression" : "Expression",
-            "KanjiCustomKeyword" : "French Keyword",
+            "KanjiUseCustomDeck" : False, #False : Use default english keyword from Heisig
+            #KanjiCustomDeckName" : u'日本語::漢字::意味', 
+            #"KanjiCustomExpression" : "Expression",
+            #"KanjiCustomKeyword" : "French Keyword",
             "KanjiDisplayWithFuriganaMod" : True
         },
         "FanAtiC" : { #Other Profile Name
@@ -54,7 +54,7 @@ class KanjiOverlay:
             self.KanjiDeckName = profileVar["KanjiCustomDeckName"]
             self.KanjiExpression = profileVar["KanjiCustomExpression"]
             self.KanjiKeyword = profileVar["KanjiCustomKeyword"]
-            self.KanjiDisplayWithFuriganaMod = profileVar["KanjiDisplayWithFuriganaMod"]
+        self.KanjiDisplayWithFuriganaMod = profileVar["KanjiDisplayWithFuriganaMod"]
         
         self.kanjiCustomDictPath = kanjiCustomDictPath = os.path.join(mw.pm.profileFolder(), 'custom-kol.db')
         self.kanjiDefaultDictPath = kanjiDefaultDictPath = os.path.join(mw.pm.addonFolder(), 'kol', 'english-kol.db')
