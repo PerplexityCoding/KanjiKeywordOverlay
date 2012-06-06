@@ -25,10 +25,10 @@ class KanjiOverlay:
     ################# CUSTOMIZE ###################
     Profiles = {
         "DEFAULT" : { #Profile by default
-            "KanjiUseCustomDeck" : True, #False : Use default english keyword from Heisig
-            "KanjiCustomDeckName" : u'日本語::漢字::意味', 
-            "KanjiCustomExpression" : "Expression",
-            "KanjiCustomKeyword" : "French Keyword",
+            "KanjiUseCustomDeck" : False,
+            "KanjiCustomDeckName" : u'',
+            "KanjiCustomExpression" : "",
+            "KanjiCustomKeyword" : "",
             "KanjiDisplayWithFuriganaMod" : True
         },
         "FanAtiC" : { #Other Profile Name
