@@ -55,4 +55,15 @@ class AnkiHelper:
 
         return ankiCards
 
+    @staticmethod
+    def isDeckModified(dlmod, nlmod, clmod, deck):
+        if dlmod != deck["mod"]:
+            return True
+        did = deck["id"]
+        return mw.col.db.first("select * From Notes n, Cards c "
+            "where c.nid = n.id and (n.mod > ? or c.mod > ?) and c.did = ? limit 1", nlmod, clmod, did) != None
     
+    @staticmethod
+    def getLastModified(did):
+        maxes = mw.col.db.first("Select max(n.mod), max(c.mod) from Notes n, Cards c Where c.nid = n.id and c.did = ?", did)
+        return maxes[0], maxes[1]

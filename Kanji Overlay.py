@@ -25,10 +25,10 @@ class KanjiOverlay:
     ################# CUSTOMIZE ###################
     Profiles = {
         "DEFAULT" : { #Profile by default
-            "KanjiUseCustomDeck" : False, #False : Use default english keyword from Heisig
-            #KanjiCustomDeckName" : u'日本語::漢字::意味', 
-            #"KanjiCustomExpression" : "Expression",
-            #"KanjiCustomKeyword" : "French Keyword",
+            "KanjiUseCustomDeck" : True, #False : Use default english keyword from Heisig
+            "KanjiCustomDeckName" : u'日本語::漢字::意味', 
+            "KanjiCustomExpression" : "Expression",
+            "KanjiCustomKeyword" : "French Keyword",
             "KanjiDisplayWithFuriganaMod" : True
         },
         "FanAtiC" : { #Other Profile Name
@@ -65,10 +65,10 @@ class KanjiOverlay:
         if self.KanjiUseCustomDeck:            
             if os.path.exists(kanjiCustomDictPath):
                 kanjiFile = open(kanjiCustomDictPath, "rb")
-                mod, self.kanjiDict = pickle.load(kanjiFile)
+                self.dlmod, self.nlmod, self.clmod, self.kanjiDict = pickle.load(kanjiFile)
                 
                 deck = mw.col.decks.byName(self.KanjiDeckName)
-                if deck["mod"] != mod:
+                if AnkiHelper.isDeckModified(self.dlmod, self.nlmod, self.clmod, deck):
                     self.kanjiDict = self.loadFromCustomDeck()
             else:
                 self.kanjiDict = self.loadFromCustomDeck()
@@ -76,7 +76,7 @@ class KanjiOverlay:
             if os.path.exists(kanjiDefaultDictPath) == False:
                 raise Exception('Missing Default Dict')
             kanjiFile = open(kanjiDefaultDictPath, "rb")
-            mod, self.kanjiDict = pickle.load(kanjiFile)
+            self.dlmod, self.nlmod, self.clmod, self.kanjiDict = pickle.load(kanjiFile)
 
         # Add CSS
         if not os.path.exists(self.cssFileInProfile):
@@ -106,6 +106,12 @@ class KanjiOverlay:
         Card.css = KanjiOverlay.oldCss
         
     def injectKanjiOverlay(self, txt, *args):
+        #seems to crash Anki when using the browser :/
+        #if self.KanjiUseCustomDeck and os.path.exists(self.kanjiCustomDictPath): # reload if deck modified, 
+        #    deck = mw.col.decks.byName(self.KanjiDeckName)
+        #    log("test deck modified")
+        #    if AnkiHelper.isDeckModified(self.dlmod, self.nlmod, self.clmod, deck): # seems to crash Anki when search
+        #        self.kanjiDict = self.loadFromCustomDeck()
         def remap():
             for c in txt:
                 if c >= u'\u4E00' and c <= u'\u9FBF': #Kanji
@@ -121,6 +127,7 @@ class KanjiOverlay:
         log("loadFromCustomDeck")
         deck = mw.col.decks.byName(self.KanjiDeckName)
         cards = AnkiHelper.getCards(deck["id"])
+
         kanjiDict = dict()
         for card in cards:
             note = card.note
@@ -128,8 +135,11 @@ class KanjiOverlay:
                 kanjiDict[note[self.KanjiExpression]] = (note[self.KanjiKeyword], card.ivl)
             except: continue
 
+        self.dlmod = deck["mod"]
+        self.nlmod, self.clmod = AnkiHelper.getLastModified(deck["id"])
+
         kanjiFile = open(self.kanjiCustomDictPath, "wb")
-        pickle.dump((deck["mod"], kanjiDict), kanjiFile, 2)
+        pickle.dump((self.dlmod, self.nlmod, self.clmod, kanjiDict), kanjiFile, 2)
         
         return kanjiDict
     
