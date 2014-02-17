@@ -1,6 +1,6 @@
 ##############################################################################################
 
-                        Kanji OverLay v0.1 - Anki Plugin
+                        Kanji OverLay v0.2 - Anki Plugin
 						--------------------------------
 
 Git: https://github.com/fanatic84/KanjiKeywordOverlay.git
