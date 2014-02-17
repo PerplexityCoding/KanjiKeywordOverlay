@@ -140,7 +140,7 @@ class Ui_Dialog(object):
         self.label_5.setText(_translate("Dialog", "Field with Kanji", None))
         self.label_2.setText(_translate("Dialog", "Field with Meaning", None))
         self.groupBox.setTitle(_translate("Dialog", "Advanced", None))
-        self.chkDisplayWithFuriganaMod.setText(_translate("Dialog", "enable Kanji Overlay by \'furigana\'", None))
+        self.chkDisplayWithFuriganaMod.setText(_translate("Dialog", "enable Kanji Overlay for the furigana Plugin", None))
         self.chkAlsoLoadDefaultDB.setText(_translate("Dialog", "show default values for not existing values \n"
 "(no differnent stlyes will be available then)", None))
         self.chkColorizeKanjis.setText(_translate("Dialog", "change style for Kanji knowledge level", None))
