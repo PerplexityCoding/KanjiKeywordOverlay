@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'C:\Users\DarkTrick\Desktop\kol_Package\kol\KolConfigGui.ui'
+# Form implementation generated from reading ui file 'kol/KolConfigGui.ui'
 #
-# Created: Wed Feb  5 19:44:01 2014
-#      by: PyQt4 UI code generator 4.9.6
+# Created by: PyQt4 UI code generator 4.11.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -26,7 +25,7 @@ except AttributeError:
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName(_fromUtf8("Dialog"))
-        Dialog.resize(501, 436)
+        Dialog.resize(549, 387)
         self.verticalLayout_2 = QtGui.QVBoxLayout(Dialog)
         self.verticalLayout_2.setObjectName(_fromUtf8("verticalLayout_2"))
         self.verticalLayout = QtGui.QVBoxLayout()
@@ -90,8 +89,10 @@ class Ui_Dialog(object):
         self.groupBox = QtGui.QGroupBox(self.tab)
         self.groupBox.setObjectName(_fromUtf8("groupBox"))
         self.verticalLayout_10 = QtGui.QVBoxLayout(self.groupBox)
+        self.verticalLayout_10.setMargin(2)
         self.verticalLayout_10.setObjectName(_fromUtf8("verticalLayout_10"))
         self.verticalLayout_7 = QtGui.QVBoxLayout()
+        self.verticalLayout_7.setContentsMargins(5, -1, 5, -1)
         self.verticalLayout_7.setObjectName(_fromUtf8("verticalLayout_7"))
         self.chkDisplayWithFuriganaMod = QtGui.QCheckBox(self.groupBox)
         self.chkDisplayWithFuriganaMod.setLayoutDirection(QtCore.Qt.LeftToRight)
@@ -104,6 +105,18 @@ class Ui_Dialog(object):
         self.chkColorizeKanjis.setToolTip(_fromUtf8(""))
         self.chkColorizeKanjis.setObjectName(_fromUtf8("chkColorizeKanjis"))
         self.verticalLayout_7.addWidget(self.chkColorizeKanjis)
+        self.horizontalLayout_2 = QtGui.QHBoxLayout()
+        self.horizontalLayout_2.setSpacing(0)
+        self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
+        self.chkKanjiLink = QtGui.QCheckBox(self.groupBox)
+        self.chkKanjiLink.setMinimumSize(QtCore.QSize(150, 0))
+        self.chkKanjiLink.setObjectName(_fromUtf8("chkKanjiLink"))
+        self.horizontalLayout_2.addWidget(self.chkKanjiLink)
+        self.editKanjiLink = QtGui.QLineEdit(self.groupBox)
+        self.editKanjiLink.setEnabled(False)
+        self.editKanjiLink.setObjectName(_fromUtf8("editKanjiLink"))
+        self.horizontalLayout_2.addWidget(self.editKanjiLink)
+        self.verticalLayout_7.addLayout(self.horizontalLayout_2)
         self.verticalLayout_10.addLayout(self.verticalLayout_7)
         self.verticalLayout_5.addWidget(self.groupBox)
         self.tabWidget.addTab(self.tab, _fromUtf8(""))
@@ -144,11 +157,13 @@ class Ui_Dialog(object):
         self.chkAlsoLoadDefaultDB.setText(_translate("Dialog", "show default values for not existing values \n"
 "(no differnent stlyes will be available then)", None))
         self.chkColorizeKanjis.setText(_translate("Dialog", "change style for Kanji knowledge level", None))
+        self.chkKanjiLink.setText(_translate("Dialog", "add link for kanji", None))
+        self.editKanjiLink.setPlaceholderText(_translate("Dialog", "eg: http://tangorin.com/kanji/%s", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("Dialog", "Config", None))
         self.textEdit.setHtml(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.13913pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.15094pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt; font-weight:600; text-decoration: underline;\">Table of Content</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">- Whats this? What can I do with this?</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">- How do I use it?</span></p>\n"

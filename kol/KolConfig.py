@@ -20,7 +20,9 @@ class KolConfig:
         KanjiUseCustomDeck                         = False,
         KanjiDisplayWithFuriganaMod                = True,
         KanjiLoadDefaultValuesForNonExistingValues = False,
-        KanjiShowColorsForKnownKanji               = True):
+        KanjiShowColorsForKnownKanji               = True,
+        KanjiUseLink                               = False,
+        KanjiUseLinkUrl                            = ''):
             self.ProfileName             = ProfileName
             self.KanjiUseCustomDeck      = KanjiUseCustomDeck
             self.KanjiDeckName           = KanjiDeckName
@@ -29,6 +31,8 @@ class KolConfig:
             self.KanjiDisplayWithFuriganaMod                = KanjiDisplayWithFuriganaMod
             self.KanjiLoadDefaultValuesForNonExistingValues = KanjiLoadDefaultValuesForNonExistingValues
             self.KanjiShowColorsForKnownKanji               = KanjiShowColorsForKnownKanji
+            self.KanjiUseLink                               = KanjiUseLink
+            self.KanjiUseLinkUrl                            = KanjiUseLinkUrl
 
 #-------------------------------------------------------------------------------
 #-----------------------------   globals  -------------------------------------
@@ -141,11 +145,18 @@ class KolConfigsManager:
         ret = None
         if(profileName in self.allProfiles):
             ret = self.allProfiles[profileName]
+            self.migrateProfile(ret)
         else:
             ret = self.addNewProfile(profileName)
 
         return ret
         pass
+
+    def migrateProfile(self, profile):
+        if hasattr(profile, 'KanjiUseLink') == False:
+            profile.KanjiUseLink = False
+        if hasattr(profile, 'KanjiUseLinkUrl') == False:
+            profile.KanjiUseLinkUrl = ''
 
     def getAllProfileNames(self):
         ret = self.allProfiles.keys()
@@ -261,6 +272,9 @@ class KolConfigDlg(QDialog):
 
         curProf = self.__kolConfigs.getProfileByName(ProfileName)
 
+        gui.chkKanjiLink.stateChanged.connect(self.kanjiLinkCbkChanged)
+        self.kanjiLinkCbkChanged(0)
+
         if(curProf != None):
             self.fillProfileDependendCbos(self.__ankiConnection,ProfileName)
 
@@ -269,15 +283,21 @@ class KolConfigDlg(QDialog):
             gui.cboCustomExpression.         setEditText(curProf.KanjiExpression)
             gui.cboCustomKeyword.            setEditText(curProf.KanjiKeyword)
 
+
             gui.chkUseCustomDeck            .setChecked(curProf.KanjiUseCustomDeck)
             gui.chkDisplayWithFuriganaMod   .setChecked(curProf.KanjiDisplayWithFuriganaMod)
             gui.chkAlsoLoadDefaultDB        .setChecked(curProf.KanjiLoadDefaultValuesForNonExistingValues)
             gui.chkColorizeKanjis           .setChecked(curProf.KanjiShowColorsForKnownKanji)
+            gui.chkKanjiLink                .setChecked(curProf.KanjiUseLink)
+            gui.editKanjiLink               .setText(curProf.KanjiUseLinkUrl)
         else:
             print('current profile could not be found')
             pass
 
         #print('DEBUG: ' + str(self.__kolConfigs.getAllProfileNames()))
+
+    def kanjiLinkCbkChanged(self, int):
+        self.__gui.editKanjiLink.setEnabled(self.__gui.chkKanjiLink.isChecked())
 
     def updateConfigFromGui(self, bProfilesChanged = False):
         #print("DEBUG: updateConfigFromGui")
@@ -303,6 +323,8 @@ class KolConfigDlg(QDialog):
             curProf.KanjiDisplayWithFuriganaMod = gui.chkDisplayWithFuriganaMod.isChecked()
             curProf.KanjiLoadDefaultValuesForNonExistingValues = gui.chkAlsoLoadDefaultDB.isChecked()
             curProf.KanjiShowColorsForKnownKanji    = gui.chkColorizeKanjis.isChecked()
+            curProf.KanjiUseLink = gui.chkKanjiLink.isChecked()
+            curProf.KanjiUseLinkUrl = gui.editKanjiLink.text()
             #print('DEBUG: update from gui ok - updated profile: ' + curProf.ProfileName)
             return True
         else:
