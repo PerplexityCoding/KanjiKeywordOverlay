@@ -35,7 +35,9 @@ class KanjiOverlay:
                         KanjiKeyword = '',
                         KanjiDisplayWithFuriganaMod = True,
                         KanjiLoadDefaultValuesForNonExistingValues = False,
-                        KanjiShowColorsForKnownKanji = True )
+                        KanjiShowColorsForKnownKanji = True,
+                        KanjiUseLink = False,
+                        KanjiUseLinkUrl = '')
         ,"User 1" :  #Other Profile Name
                     KolConfig.KolConfig(
                         #ProfileName = 'User 1',
@@ -45,7 +47,9 @@ class KanjiOverlay:
                         KanjiKeyword = 'Back',
                         KanjiDisplayWithFuriganaMod = True,
                         KanjiLoadDefaultValuesForNonExistingValues = False,
-                        KanjiShowColorsForKnownKanji = True )
+                        KanjiShowColorsForKnownKanji = True,
+                        KanjiUseLink = False,
+                        KanjiUseLinkUrl = '')
 
         }
         # Add other Profile name
@@ -185,7 +189,13 @@ class KanjiOverlay:
                     if c in self.kanjiDict:
                         kw, ivl = self.kanjiDict.get(c)
                         unkown = self.__CssClassOfNotReviewedKanji if ivl <= 0 and self.Profile.KanjiUseCustomDeck else ""
-                        yield '<span class="kol%s">%s<span>%s</span></span>' % (unkown, c, kw)
+
+                        res = '<span class="kol%s">%s<span>%s</span></span>' % (unkown, c, kw)
+                        if self.Profile.KanjiUseLink:
+                            url = self.Profile.KanjiUseLinkUrl
+                            url = url % c if '%s' in url else url + c
+                            res = '<a style="text-decoration:none;" href="%s">%s</a>' % (url, res)
+                        yield res
                     else: yield '<span class="' + self.__CssClassOfUnknownKanji + '">%s</span>' % (c)
                 else: yield c
 
