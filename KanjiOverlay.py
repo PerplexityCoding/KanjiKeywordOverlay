@@ -89,9 +89,6 @@ class KanjiOverlay:
         log("End Load Plugin")
 
     def __addCSS(self):
-        if not os.path.exists(self.cssFileInProfile):
-            shutil.copy2(self.cssFileInPlugin, self.cssFileInProfile)
-
         KanjiOverlay.css = self.loadCss()
         KanjiOverlay.oldCss = Card.css
         Card.css = injectCss
@@ -148,8 +145,8 @@ class KanjiOverlay:
     def __setupObjectData(self, profileVar):
         self.kanjiCustomDictPath    = os.path.join(mw.pm.profileFolder(), 'custom-kol.db')
         self.kanjiDefaultDictPath   = os.path.join(mw.pm.addonFolder(), 'kol', 'english-kol.db')
-        self.cssFileInPlugin        = os.path.join(mw.pm.addonFolder(), 'kol', 'default-kol.css')
-        self.cssFileInProfile       = os.path.join(mw.pm.profileFolder(), 'custom-kol.css')
+        self.cssFileInPlugin        = os.path.join(mw.pm.addonFolder(), 'kol', 'styles-kol.css')
+        self.cssFileInProfile       = os.path.join(mw.pm.profileFolder(), 'styles-kol.css')
 
         self.kanjiDict = None
 
@@ -166,9 +163,16 @@ class KanjiOverlay:
 
     def loadCss(self):
         try:
-            f = open(self.cssFileInProfile, 'r')
+            f = open(self.cssFileInPlugin, 'r')
             css = unicode(f.read(), 'utf-8')
             f.close()
+
+            if os.path.exists(self.cssFileInProfile):
+                f = open(self.cssFileInProfile, 'r')
+                cssInProfile = unicode(f.read(), 'utf-8')
+                css += cssInProfile
+                f.close()
+
         except:
             css = u''
         return css

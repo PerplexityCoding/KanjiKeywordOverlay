@@ -131,14 +131,20 @@ For instance, {{kol:Expression}}
 ----------------------------------------------------------------------------------------------
 C. Change the style of the pop-in
 
-You can change the style of the pop-in by editing the custom-kol.css,
-that the plugin placed in your profile folder.
-
+You can change the style of the pop-in :
+ - by editing the styles-kol.css in your plugin folder.
+ - or by creating the styles-kol.css in your anki profile folder and making override there.
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#- CHANGES -#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
 v0.2.1:
 - Add an option to be able to add link that open a configurable url when you click on a kanji.
+- Fix an issue where you couldn't copy / paste kanji without the definition
+
+important:
+---------------
+The css loading has been changed. You have to reload kol on the menu (it will overide your css if you have custom
+change, make backup !)
 
 v0.2:
 important:
@@ -178,5 +184,6 @@ v0.1:
 - Insperated from the anki v1 plugin of Brian Bush, Thanks !
 - The plugin "Local css" for Anki 2 of Roland Sieker, Thanks !
 - Big thanks for Ricky for Adding GUI for the plugin, Thanks !
+- Thanks for Tyler for the help with some improvements and bug fixes, Thanks !
 - Of corse, Damien Elmes for Anki & Anki 2, Thanks !!
 
