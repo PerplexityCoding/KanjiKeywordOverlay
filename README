@@ -3,7 +3,7 @@
                         Kanji OverLay v0.2.1 - Anki Plugin
 						--------------------------------
 
-Git: https://github.com/fanatic84/KanjiKeywordOverlay.git
+Git: <a href="https://github.com/fanatic84/KanjiKeywordOverlay.git" rel="nofollow">https://github.com/fanatic84/KanjiKeywordOverlay.git</a>
 Contact: fanatic84@gmail.com
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#- WHAT IS IT ? #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
@@ -11,15 +11,13 @@ Contact: fanatic84@gmail.com
 Kanji OverLay is a anki-plugin used to display Keywords on Kanji (from Heisig or other)
 When you move your cursor on a kanji, it display a pop-in with the corresponding keyword.
 
-See screenshots:
-https://raw2.github.com/fanatic84/KanjiKeywordOverlay/master/screenshots/screen1.jpg
+<img src="https://raw.githubusercontent.com/fanatic84/KanjiKeywordOverlay/master/screenshots/screen1.jpg">
 
 ---
 Kanji OverLay can also change the color a kanji depending of your knowledge of them.
 This needs a custom deck to be specified. See "How to use ?" for more informations.
 
-See screenshots:
-https://raw2.github.com/fanatic84/KanjiKeywordOverlay/master/screenshots/screen2.jpg
+<img src="https://raw.githubusercontent.com/fanatic84/KanjiKeywordOverlay/master/screenshots/screen2.jpg">
 
 Red : kanji not seen
 Blue : kanji not referenced at all (3007 kanji referenced by default so it is fairly rare)
@@ -27,7 +25,7 @@ Blue : kanji not referenced at all (3007 kanji referenced by default so it is fa
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#- HOW TO USE ? #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
-A. Do nothing :) 
+A. Do nothing :)
 
 (If you have japanese plugin installed)
 
@@ -38,12 +36,12 @@ Kanji Overlay plugin will display information for kanji on kanjis of thoses expr
 ----------------------------------------------------------------------------------------------
 B.1 Configure The plugin
 
-https://raw2.github.com/fanatic84/KanjiKeywordOverlay/master/screenshots/screen3.jpg
+<a href="https://raw2.github.com/fanatic84/KanjiKeywordOverlay/master/screenshots/screen3.jpg" rel="nofollow">https://raw2.github.com/fanatic84/KanjiKeywordOverlay/master/screenshots/screen3.jpg</a>
 
 a) With the dialogbox
 
 a-1) Whats this? What can I do with this?
-Kanji Overlay uses a default Database for showing the meaning of the Kanjis. 
+Kanji Overlay uses a default Database for showing the meaning of the Kanjis.
 With this, you can simply use a Deck from Anki as that Database.
 
 a-2) How do I use it?
@@ -56,13 +54,13 @@ BackSide: Meaning
 a-3) Option Explanation
 
 Anki Profile
-The Kanji overlay options you set are made for this Anki Profile. 
+The Kanji overlay options you set are made for this Anki Profile.
 If you don't know, what a profile is, then you probably only have one and therefore don't need to care about this
 
 enable Kanji Overlay for the furigana Plugin
-{{furigana:FIELDNAME}} 
+{{furigana:FIELDNAME}}
 Kanji Overlay will also be shown in that field.
-If you don't enable this option, then you need to write 
+If you don't enable this option, then you need to write
 {{kol:FIELDNAME}}
 
 show default values for not existing values
@@ -78,7 +76,7 @@ Note: if you're only using the Kanji-deck as a database for kanji overlay, then 
 
 How do I change the color-settings for the Kanji?
 Simply via css.
-- class: unknown 
+- class: unknown
 will change the style of values found in your deck and not yet reviewed
 
 - class: kol-missing
@@ -87,7 +85,7 @@ will change the style of values not found in your deck
 - class: kol
 will change the general style of kol and kanjis found in your deck and already reviewed
 
-b) Or by modify "Kanji Overlay.py"
+b) Or by modify "Kanji <a href="http://Overlay.py" rel="nofollow">Overlay.py</a>"
 
 Localise the "Profiles" Variable in the top of the file, which would look like that:
 
@@ -113,13 +111,13 @@ Profiles = {
 * "KanjiCustomDeckName" : The full name of your kanji deck
 * "KanjiCustomExpression" : the name of the field containing the kanji
 * "KanjiCustomKeyword" : the name of the field containing the keyword
-* "KanjiDisplayWithFuriganaMod" : True or False; Activate Kanji OverLay for 
+* "KanjiDisplayWithFuriganaMod" : True or False; Activate Kanji OverLay for
    {{furigana:}} or {{kanji:}} tags in your templates. True by default.
 * "KanjiUseLink" : True or False; Activate link on a kanji
 * "KanjiUseLinkUrl" : Specify the url to open a link when you click a kanji if KanjiUseLink is set to True
-  for instance: http://tangorin.com/kanji/%s
+  for instance: <a href="http://tangorin.com/kanji/%s" rel="nofollow">http://tangorin.com/kanji/%s</a>
   The %s specify where you kanji is set in the url, so for instance if the kanji is 試
-  Then the url would be http://tangorin.com/kanji/試
+  Then the url would be <a href="http://tangorin.com/kanji/試" rel="nofollow">http://tangorin.com/kanji/試</a>
 
 If the profile name of your account is not found, then Default is used.
 
@@ -143,19 +141,18 @@ v0.2.1:
 
 important:
 ---------------
-The css loading has been changed. You have to reload kol on the menu (it will overide your css if you have custom
-change, make backup !)
+The css loading has been changed. If you have styles configure it again. see C.
 
 v0.2:
 important:
 ---------------
 - name of the Addon-file changed: no space
-- 2 new menu items under Tools -> Addons -> Kanji Overlay
+- 2 new menu items under Tools -&gt; Addons -&gt; Kanji Overlay
 - GUI for Add-on configuration added
 
 general:
 -------------
-- 2 new options: 
+- 2 new options:
 	- load default DB in addition to custom
 	- disable the color-changes for unknown kanji
 - if custom database could not be loaded, the default DB will be loaded
@@ -178,12 +175,11 @@ v0.1:
   - Use custom Kanji Deck or predefined English Keyword (Heisig)
   - Reload kanji keyword dictionnary only if modified
   - Change color of the kanji if seen, missing
-  
-  
+
+
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#- THANKS #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 - Insperated from the anki v1 plugin of Brian Bush, Thanks !
 - The plugin "Local css" for Anki 2 of Roland Sieker, Thanks !
 - Big thanks for Ricky for Adding GUI for the plugin, Thanks !
 - Thanks for Tyler for the help with some improvements and bug fixes, Thanks !
-- Of corse, Damien Elmes for Anki & Anki 2, Thanks !!
-
+- Of corse, Damien Elmes for Anki &amp; Anki 2, Thanks !!
