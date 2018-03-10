@@ -10,7 +10,8 @@ from aqt.utils import showInfo
 from kol.src import KolConfigDialog
 from kol.src.AnkiHelper import AnkiHelper
 from kol.src.KolConfigsManager import KolConfig, KolConfigsManager
-from kol.src.utils import log
+from kol.src.utils import log, readFile
+
 
 class KanjiOverlay:
     DEFAULT_PROFILE = KolConfig()
@@ -19,7 +20,7 @@ class KanjiOverlay:
     __alwaysLoadNewDictData = False
     __DEBUG__ShowExceptions = False
     __saveCustomDict = False
-    __CssClassOfNotReviewedKanji = " unknown"
+    __CssClassOfNotReviewedKanji = "kol-unknown"
     __CssClassOfUnknownKanji = "kol-missing"
 
     profile = None
@@ -34,6 +35,33 @@ class KanjiOverlay:
         self.__defaultKanjiDict = None
         self.__kolConfigsManager = KolConfigsManager.getInstance()
 
+        self.__loadProfile()
+
+        self.__setupObjectData()
+        self.__loadKanjiDict()
+        self.__loadCss()
+        self.__loadScripts()
+        self.__loadTemplate()
+        self.__addHooks()
+
+        log("End Load Plugin")
+
+    def unload(self):
+        pass
+
+    def reload(self):
+        #self.unload()
+        #oldValue = self.__alwaysLoadNewDictData
+        #self.__alwaysLoadNewDictData = True
+        #self.load()
+        # restore old value
+        #self.__alwaysLoadNewDictData = oldValue
+        log("reload start")
+        self.__loadProfile()
+        self.__loadKanjiDict()
+        log("reload stop")
+
+    def __loadProfile(self):
         profileName = mw.pm.name
         self.profile = self.__kolConfigsManager.getProfileByName(profileName)
 
@@ -44,14 +72,6 @@ class KanjiOverlay:
             self.__CssClassOfNotReviewedKanji = ""
             self.__CssClassOfUnknownKanji = ""
 
-        self.__setupObjectData(self.profile)
-        self.__loadKanjiDict()
-        self.__addCSS()
-        self.__loadTemplate()
-        self.__addHooks()
-
-        log("End Load Plugin")
-
     def openConfigDialog(self):
         # for testing:
         # AnkiConnection = KolConfig.ankiConnectionMOCK()
@@ -59,14 +79,18 @@ class KanjiOverlay:
 
         self.reload()
 
-    def __setupObjectData(self, profileVar):
-        self.kanjiCustomDictPath = os.path.join(mw.pm.profileFolder(), "custom-kol.db")
-        self.kanjiDefaultDictPath = os.path.join(mw.pm.addonFolder(), "kol", "data", "english-kol.db")
+    def __setupObjectData(self):
+        self.kanjiDefaultDictPath = os.path.join(mw.pm.addonFolder(), "kol", "data", "english.db")
+        self.kanjiCustomDictPath = os.path.join(mw.pm.profileFolder(), "kol", "user_files", "custom-kol.db")
 
-        self.cssFileInPlugin = os.path.join(mw.pm.addonFolder(), "kol", "data", "styles-kol.css")
-        self.cssFileInProfile = os.path.join(mw.pm.profileFolder(), "styles-kol.css")
+        self.cssFileInPlugin = os.path.join(mw.pm.addonFolder(), "kol", "data", "styles.css")
+        self.cssFileUserFiles = os.path.join(mw.pm.addonFolder(), "kol", "user_files", "styles.css")
 
-        self.templateInPlugin = os.path.join(mw.pm.addonFolder(), "kol", "data", "template-kol.hbs")
+        self.scriptsFileInPlugin = os.path.join(mw.pm.addonFolder(), "kol", "data", "scripts.js")
+        self.scriptsFileUserFiles = os.path.join(mw.pm.addonFolder(), "kol", "user_files", "scripts.js")
+
+        self.templateInPlugin = os.path.join(mw.pm.addonFolder(), "kol", "data", "template.hbs")
+        self.templateUserFiles = os.path.join(mw.pm.addonFolder(), "kol", "user_files", "template.hbs")
 
     def __loadKanjiDict(self):
         self.kanjiDict = dict()
@@ -91,21 +115,24 @@ class KanjiOverlay:
         else:
             self.kanjiDict = self.__loadDefaultKanjiDB()
 
-    def __loadCustomKanjiDB(self):
-        if os.path.exists(self.kanjiCustomDictPath):
-            kanjiFile = open(self.kanjiCustomDictPath, "rb")
-            self.dlmod, self.nlmod, self.clmod, kanjiDict = pickle.load(kanjiFile)
-            deck = mw.col.decks.byName(self.profile.kanjiDeckName)
-            if (AnkiHelper.isDeckModified(self.dlmod, self.nlmod, self.clmod, deck)
-                or self.__alwaysLoadNewDictData):
-                kanjiDict = self.__createCustomDeck()
-        else:
-             kanjiDict = self.__createCustomDeck()
-
-        return kanjiDict
+    # def __loadCustomKanjiDB(self):
+    #     if os.path.exists(self.kanjiCustomDictPath):
+    #         kanjiFile = open(self.kanjiCustomDictPath, "rb")
+    #         self.dlmod, self.nlmod, self.clmod, kanjiDict = pickle.load(kanjiFile)
+    #         deck = mw.col.decks.byName(self.profile.kanjiDeckName)
+    #         if (AnkiHelper.isDeckModified(self.dlmod, self.nlmod, self.clmod, deck)
+    #             or self.__alwaysLoadNewDictData):
+    #             kanjiDict = self.__createCustomDeck()
+    #     else:
+    #          kanjiDict = self.__createCustomDeck()
+    #
+    #     return kanjiDict
 
     def __createCustomDeck(self, save=False):
         log("__createCustomDeck")
+
+        if self.profile and not self.profile.kanjiCustomProfileEnabled:
+            return
 
         deck = mw.col.decks.byName(self.profile.kanjiDeckName)
         cards = AnkiHelper.getCards(deck["id"])
@@ -136,95 +163,92 @@ class KanjiOverlay:
         self.__defaultKanjiDict = kanjiDict
         return kanjiDict
 
-    def __addCSS(self):
-        KanjiOverlay.css = self.loadCss()
-        KanjiOverlay.oldCss = Card.css
-        Card.css = KanjiOverlay.injectCss
+    def __loadTemplate(self):
+        if os.path.exists(self.templateUserFiles):
+            self.template = readFile(self.templateUserFiles)
+        else:
+            self.template = readFile(self.templateInPlugin)
+
+        if self.template == None:
+            self.template = u""
 
     def __addHooks(self):
         addHook("fmod_kol", self.injectKanjiOverlay)
         if self.profile.kanjiDisplayWithFuriganaMod:
             addHook("fmod_furigana", self.injectKanjiOverlay)
             addHook("fmod_kanji", self.injectKanjiOverlay)
+        addHook('prepareQA', self.__prepareQA)
 
-    def reload(self):
-        #self.unload()
-        #oldValue = self.__alwaysLoadNewDictData
-        #self.__alwaysLoadNewDictData = True
-        #self.load()
-        # restore old value
-        #self.__alwaysLoadNewDictData = oldValue
-        log("reload start")
-        self.kanjiDict = self.__createCustomDeck()
-        log("reload stop")
+    def __prepareQA(self, html, card, context):
+        if context == "reviewAnswer" or context == "previewAnswer" or context == "clayoutAnswer":
+            html += self.css
+            html += self.scripts
+        log(html)
+        log(card)
+        log(context)
+        return html
 
-    def loadCss(self):
+    def __loadCss(self):
         try:
-            f = open(self.cssFileInPlugin, "r")
-            css = unicode(f.read(), "utf-8")
-            f.close()
+            css = readFile(self.cssFileInPlugin)
 
-            if os.path.exists(self.cssFileInProfile):
-                f = open(self.cssFileInProfile, "r")
-                cssInProfile = unicode(f.read(), "utf-8")
+            if os.path.exists(self.cssFileUserFiles):
+                cssInProfile = readFile(self.cssFileUserFiles)
                 css += cssInProfile
-                f.close()
-
         except:
             css = u""
-        return css
+        self.css = '<style>' + css + '</style>'
 
-    def __loadTemplate(self):
+    def __loadScripts(self):
         try:
-            f = open(self.templateInPlugin, "r")
-            self.template = unicode(f.read(), "utf-8")
-            f.close()
+            if os.path.exists(self.scriptsFileUserFiles):
+                scripts = readFile(self.scriptsFileUserFiles)
+            else:
+                scripts = readFile(self.scriptsFileInPlugin)
         except:
-            self.template = u""
-
-    def unload(self):
-        Card.css = KanjiOverlay.oldCss
+            scripts = u""
+        self.scripts = '<script>' + scripts + '</script>'
 
     def injectKanjiOverlay(self, txt, *args):
-        # TODO: seems to crash Anki when using the browser :/
-        # if self.kanjiUseCustomDeck and os.path.exists(self.kanjiCustomDictPath): # reload if deck modified,
-        #    deck = mw.col.decks.byName(self.kanjiDeckName)
-        #    log("test deck modified")
-        #    if AnkiHelper.isDeckModified(self.dlmod, self.nlmod, self.clmod, deck): # seems to crash Anki when search
-        #        self.kanjiDict = self.__loadFromCustomDeck()
         def remap():
             for c in txt:
                 if c >= u"\u4E00" and c <= u"\u9FBF":  # Kanji
-                    if c in self.kanjiDict:
-                        note, ivl = self.kanjiDict.get(c)
-                        unkown = self.__CssClassOfNotReviewedKanji if ivl <= 0 and self.profile.kanjiCustomProfileEnabled else ""
-                        overlay = self.__createOverlayHtml(note)
-
-                        res = "<span class='kol%s'>%s<span class='overlay'>%s</span></span>" % (unkown, c, overlay)
-                        if self.profile.kanjiUseLink:
-                            url = self.profile.kanjiUseLinkUrl
-                            url = url % c if "%s" in url else url + c
-                            res = "<a style='text-decoration:none;' href='%s'>%s</a>" % (url, res)
-                        yield res
-                    else:
-                        yield "<span class='" + self.__CssClassOfUnknownKanji + "'>%s</span>" % (c)
+                    yield self.__createHtml(c)
                 else:
                     yield c
-
         return "".join([x for x in remap()])
+    
+    def __getKanjiUrl(self, kanji):
+        url = None
+        if self.profile.kanjiUseLink:
+            url = self.profile.kanjiUseLinkUrl
+            url = url % kanji if "%s" in url else url + kanji
+        return url
 
-    def __createOverlayHtml(self, ankiNote):
-        context = dict(ankiNote)
-        context["keyword"] = self.__getValue(context, self.profile.kanjiKeyword) or self.__getValue(context, "keyword")
+    def __createHtml(self, kanji):
+        if kanji in self.kanjiDict:
+            ankiNote, ivl = self.kanjiDict.get(kanji)
+            context = dict(ankiNote)
 
-        if self.profile.kanjiOnYomiEnabled:
-            context["kol-onYomi"] = self.__getValue(context, self.profile.kanjiOnYomi) or self.__getValue(context, "onYomi")
+            unkownClass = self.__CssClassOfNotReviewedKanji if ivl <= 0 and self.profile.kanjiCustomProfileEnabled else ""
+            context["class"] = unkownClass
 
-        if self.profile.kanjiKunYomiEnabled:
-            context["kol-kunYomi"] = self.__getValue(context, self.profile.kanjiKunYomi) or self.__getValue(context, "kunYomi")
+            context["keyword"] = self.__getValue(context, self.profile.kanjiKeyword) or self.__getValue(context, "keyword")
 
-        if self.profile.kanjiMemoStoryEnabled:
-            context["kol-memoStory"] = self.__getValue(context, self.profile.kanjiMemoStory) or self.__getValue(context, "heisigStory")
+            if self.profile.kanjiOnYomiEnabled:
+                context["kol-onYomi"] = self.__getValue(context, self.profile.kanjiOnYomi) or self.__getValue(context, "onYomi")
+
+            if self.profile.kanjiKunYomiEnabled:
+                context["kol-kunYomi"] = self.__getValue(context, self.profile.kanjiKunYomi) or self.__getValue(context, "kunYomi")
+
+            if self.profile.kanjiMemoStoryEnabled:
+                context["kol-memoStory"] = self.__getValue(context, self.profile.kanjiMemoStory) or self.__getValue(context, "heisigStory")
+        else:
+            context = dict()
+            context["class"] = self.__CssClassOfUnknownKanji
+
+        context["kanji"] = kanji
+        context["kanjiLink"] = self.__getKanjiUrl(kanji)
 
         return Template(self.template, context).render()
 

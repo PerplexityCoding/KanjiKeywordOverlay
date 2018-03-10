@@ -2,7 +2,7 @@
 # -----------------------------   Dialog    -------------------------------------
 # -------------------------------------------------------------------------------
 import sys
-from PyQt4.QtGui import QDialog, QApplication
+from aqt.qt import QDialog, QApplication
 
 from kol.src import KolConfigGui
 from kol.src.KolConfigsManager import KolConfigsManager

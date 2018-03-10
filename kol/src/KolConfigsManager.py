@@ -5,7 +5,7 @@ import pickle
 import os
 
 dir = os.path.dirname(__file__)
-CONFIG_FILENAME = os.path.join(dir, "../data/KolConfig.profiles")
+CONFIG_FILENAME = os.path.join(dir, "../user_files/KolConfig.profiles")
 
 class KolConfig:
     def __init__(self,

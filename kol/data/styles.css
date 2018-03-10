@@ -1,0 +1,45 @@
+.kol-unknown {
+    color: #BF1937;
+}
+
+.kol-missing {
+    color: #245185;
+}
+
+.kol {
+    border-bottom: 1px dotted #BCBCC4;
+    outline: none;
+    cursor: help;
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+}
+
+.kol-link {
+    text-decoration: none;
+}
+
+.kol-overlay {
+    color: white;
+    display:  inline-block;
+    background: #5494DE;
+    border: 1px solid #365475;
+    padding: 0.3em 0.4em;
+    position: fixed;
+    font-size: 20px;
+    font-family: Arial, Calibri, Tahoma, Geneva, sans-serif;
+    border-radius: 5px 5px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    visibility: hidden;
+    width: 350px;
+    z-index: 99;
+}
+
+.kol-keyword {
+    text-align: center;
+}
+
+.kol-story {
+    font-size: 12px;
+}

@@ -1,0 +1,8 @@
+{
+  "name": "KanjiKeywordOverlay",
+  "version": "0.0.1",
+  "scripts": {
+    "copy": "cp -r kol/* /c/Users/Gori/AppData/Roaming/Anki2/addons21/kol",
+    "generatePyui" : "echo /c/Users/Gori/AppData/Local/Programs/Python/Python36-32/Lib/site-packages/PyQt4/pyuic4.bat kol/KolConfigGui.ui -o kol/KolConfigGui.py"
+  }
+}

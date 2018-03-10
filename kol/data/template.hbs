@@ -1,0 +1,33 @@
+<span class='kol {{class}}'>
+    {{#kanjiLink}}
+        <a class='kol-link' href='{{kanjiLink}}'>
+    {{/kanjiLink}}
+
+        <span class='kol-kanji'>{{kanji}}</span>
+
+    {{#kanjiLink}}
+        </a>
+    {{/kanjiLink}}
+
+    <span class='kol-overlay'>
+        <h2 class="kol-keyword">
+            {{#keyword}}
+                {{keyword}}
+            {{/keyword}}
+        </h2>
+
+        {{#kol-onYomi}}
+            <p>On yomi: {{kol-onYomi}}</p>
+        {{/kol-onYomi}}
+
+        {{#kol-kunYomi}}
+            <p>Kun yomi: {{kol-kunYomi}}</p>
+        {{/kol-kunYomi}}
+
+        {{#kol-memoStory}}
+            <p class='kol-story'>
+                {{kol-memoStory}}
+            </p>
+        {{/kol-memoStory}}
+    </span>
+</span>
