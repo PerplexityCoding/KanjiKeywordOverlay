@@ -183,9 +183,6 @@ class KanjiOverlay:
         if context == "reviewAnswer" or context == "previewAnswer" or context == "clayoutAnswer":
             html += self.css
             html += self.scripts
-        log(html)
-        log(card)
-        log(context)
         return html
 
     def __loadCss(self):
