@@ -253,4 +253,3 @@ class KanjiOverlay:
         if attr in note:
             return note[attr]
         return None
-
