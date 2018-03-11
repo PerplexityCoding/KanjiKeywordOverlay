@@ -4,7 +4,7 @@
 #
 # Comments & Suggestions at: fanatic84@gmail.com
 #
-# Use at your own Risk :)
+# MIT License
 #
 # Insperated from the Work of Brian Bush on Anki v1 plugin, thank you very much
 # Thanks for Roland Sieker <ospalh@gmail.com> and his plugin Local css for Anki 2
