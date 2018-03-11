@@ -1,15 +1,13 @@
 # -------------------------------------------------------------------------------
 # -------------------------   Profile Manager  ----------------------------------
 # -------------------------------------------------------------------------------
-import pickle
-import os
+from aqt import mw
 
-dir = os.path.dirname(__file__)
-CONFIG_FILENAME = os.path.join(dir, "../user_files/KolConfig.profiles")
+from kol.src.utils import log
 
-class KolConfig:
+class KolConfig():
     def __init__(self,
-                 profileName="",
+                 profileName="DEFAULT",
                  kanjiDeckName="",
                  kanjiExpression="",
                  kanjiKeyword="",
@@ -43,12 +41,27 @@ class KolConfig:
         self.kanjiUseLink = kanjiUseLink
         self.kanjiUseLinkUrl = kanjiUseLinkUrl
 
+    @staticmethod
+    def createFromDict(data):
+        self = KolConfig()
+        self.__dict__.update(data)
+        return self
+
+    def toDict(self):
+        return self.__dict__
+
 class KolConfigs:
     VERSION = 5
 
-    def __init__(self):
-        self.version = KolConfigs.VERSION
-        self.allProfiles = dict()
+    def __init__(self, version = None, profiles = None):
+        self.version = version if version != None else KolConfigs.VERSION
+        self.allProfiles = self.createFromProfiles(profiles) if profiles else dict()
+
+    def createFromProfiles(self, profiles):
+        allProfiles = dict()
+        for profilesName, profilesValue in profiles.items():
+            allProfiles[profilesName] = KolConfig.createFromDict(profilesValue)
+        return allProfiles
 
     def update(self, newProfile):
         self.allProfiles.update({newProfile.profileName: newProfile})
@@ -57,6 +70,15 @@ class KolConfigs:
         if name in self.allProfiles:
             return self.allProfiles[name]
         return None
+
+    def toDict(self):
+        profiles = dict()
+        for profilesName, profilesValue in self.allProfiles.items():
+            profiles[profilesName] = profilesValue.__dict__
+        return {
+            'profiles': profiles,
+            'version': self.version
+        }
 
 class KolConfigsManager:
 
@@ -73,7 +95,7 @@ class KolConfigsManager:
         try:
             kolConfigs = self.__loadConfigsFromFs()
         except:
-            print("Warning: An error occured when loading config")
+            log("Warning: An error occured when loading config")
 
         if kolConfigs == None:
             kolConfigs = KolConfigs()
@@ -81,7 +103,8 @@ class KolConfigsManager:
         self.kolConfigs = kolConfigs
 
     def save(self):
-        pickle.dump(self.kolConfigs, open(CONFIG_FILENAME, "wb"))
+        config = self.kolConfigs.toDict()
+        mw.addonManager.writeConfig(__name__, config)
 
     def getProfileByName(self, profileName):
         kolConfigs = self.kolConfigs
@@ -91,13 +114,8 @@ class KolConfigsManager:
         return profile
 
     def __loadConfigsFromFs(self):
-        kolConfigs = pickle.load(open(CONFIG_FILENAME, "rb"))
-
-        # basically for saving time finding bugs, as pickler doesn't inform about anything:
-        if (kolConfigs.version != KolConfigs.VERSION):
-            print("Error: wrong Version in stored file")
-            raise (Exception("wrong Version in stored file. All old profiles will be deleted"))
-
+        config = mw.addonManager.getConfig(__name__)
+        kolConfigs = KolConfigs(profiles=config['profiles'], version=config['version'])
         return kolConfigs
 
     def __addNewProfile(self, profilename):

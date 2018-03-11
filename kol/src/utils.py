@@ -19,3 +19,11 @@ def readFile(path):
     except:
         res = None
     return res
+
+def writeFile(path, obj):
+    try:
+        f = open(path, mode="w", encoding="utf-8")
+        f.write(obj)
+        f.close()
+    except:
+        pass

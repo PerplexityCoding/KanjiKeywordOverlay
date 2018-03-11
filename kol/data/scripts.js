@@ -14,17 +14,15 @@
 
         $overlay.css({
             top: $parentOffset.top + $parent.outerHeight(true) + 5,
-            left: left + 'px',
-            visibility: 'visible'
+            left: left + 'px'
         });
+        $overlay.show();
     });
 
     $('.kol-kanji').off('mouseleave').on('mouseleave', (e) => {
         const $parent = $(e.currentTarget).closest('.kol');
         const $overlay = $parent.find('.kol-overlay');
-        $overlay.css({
-            visibility: 'hidden'
-        });
+        $overlay.hide()
     });
 
 })(window.$);
