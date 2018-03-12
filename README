@@ -12,14 +12,14 @@ Kanji OverLay is a anki-plugin used to display Keywords on Kanji (from Heisig or
 When you move your cursor on a kanji, it display a pop-in with the corresponding keyword.
 
 See screenshots:
-https://raw2.github.com/fanatic84/KanjiKeywordOverlay/master/screenshots/screen1.jpg
+https://raw.githubusercontent.com/fanatic84/KanjiKeywordOverlay/anki2.1/screenshots/screen1.jpg
 
 ---
 Kanji OverLay can also change the color a kanji depending of your knowledge of them.
 This needs a custom deck to be specified. See "How to use ?" for more informations.
 
 See screenshots:
-https://raw2.github.com/fanatic84/KanjiKeywordOverlay/master/screenshots/screen2.jpg
+https://raw.githubusercontent.com/fanatic84/KanjiKeywordOverlay/anki2.1/screenshots/screen2.jpg
 
 Red : kanji not seen
 Blue : kanji not referenced at all (3007 kanji referenced by default so it is fairly rare)
@@ -44,7 +44,7 @@ If you want more customisation go the next section.
 ----------------------------------------------------------------------------------------------
 B. Custom configuration
 
-DialogBox.png
+https://raw.githubusercontent.com/fanatic84/KanjiKeywordOverlay/anki2.1/screenshots/DialogBox.png
 
 B.1. Choose the profile and check the checkbox to start customization
 B.2. Choose your kanji deck, then configure the following field inside your kanji deck :
