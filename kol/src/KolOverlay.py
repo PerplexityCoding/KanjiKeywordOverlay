@@ -180,9 +180,8 @@ class KanjiOverlay:
         addHook('prepareQA', self.__prepareQA)
 
     def __prepareQA(self, html, card, context):
-        if context == "reviewAnswer" or context == "previewAnswer" or context == "clayoutAnswer":
-            html += self.css
-            html += self.scripts
+        html += self.css
+        html += self.scripts
         return html
 
     def __loadCss(self):
