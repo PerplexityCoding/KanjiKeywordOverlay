@@ -27,58 +27,50 @@ Blue : kanji not referenced at all (3007 kanji referenced by default so it is fa
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#- HOW TO USE ? #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
-A. Do nothing :) 
+A. Quick configuration
 
-(If you have japanese plugin installed)
+First of all, in order for this plugin to work, you will need to specify in your template the appropriate markup for
+your fields.
 
+If you have already japanese plugin installed, you probably already have {{furigana:Field}} or {{kanji:Field}}
+defined in your template.
+
+If it's not the case, you will need to add {{kol:Field}} for each field that you want the overlay to be displayed.
 By default, Kanji OverLay plugin use a predefined English Keywords set using Heisig.
-By default, When you specified the special tag : {{furigana:}} or {{kanji:}} in your template,
-Kanji Overlay plugin will display information for kanji on kanjis of thoses expression.
+
+With that you are ready to go, the overlay should be displayed on your kanjis.
+If you want more customisation go the next section.
 
 ----------------------------------------------------------------------------------------------
-B.1 Configure The plugin
+B. Custom configuration
 
-https://raw2.github.com/fanatic84/KanjiKeywordOverlay/master/screenshots/screen3.jpg
+DialogBox.png
 
-a) With the dialogbox
+B.1. Choose the profile and check the checkbox to start customization
+B.2. Choose your kanji deck, then configure the following field inside your kanji deck :
+B.3. Choose your kanji field
+B.4. Choose your keyword field
+B.5. Choose your on yomi field (optional)
+B.6. Choose your kun yomi field (optional)
+B.7. Choose your memo story field (optional)
+B.8. Enable if the markup {{furigana:Field}} or {{kanji:Field}} are used for display the overlay
+B.9. Enable if the default english database is used if a kanji is missing in your custom kanji deck
+B.10 Use colorisation of kanji depending on the level of knoweldge you have of that kanji
+B.11 Specify an url of the link, when you click on the kanji
 
-a-1) Whats this? What can I do with this?
-Kanji Overlay uses a default Database for showing the meaning of the Kanjis. 
-With this, you can simply use a Deck from Anki as that Database.
+----------------------------------------------------------------------------------------------
+C. Customisation
 
-a-2) How do I use it?
-You need a Deck in the form of:
-FrontSide: [Kanji]
-BackSide: Meaning
+You can change place inside your user_files:
 
-(you don't need to name the fields as "FrontSide" and "BackSide")
+C.1 "styles.css" in order to customize the style
 
-a-3) Option Explanation
+You can customize the style of the overlay by creating a new "style.css" file inside your user_files directory
+and adding your css override.
 
-Anki Profile
-The Kanji overlay options you set are made for this Anki Profile. 
-If you don't know, what a profile is, then you probably only have one and therefore don't need to care about this
+For instance:
 
-enable Kanji Overlay for the furigana Plugin
-{{furigana:FIELDNAME}} 
-Kanji Overlay will also be shown in that field.
-If you don't enable this option, then you need to write 
-{{kol:FIELDNAME}}
-
-show default values for not existing values
-If enabled, It will not only use your own deck as Kanji reference, but also the default database (if you enable this option, you don't have any color-overlay for unknown kanji)
-
-Change style for Kanji knowledge level
-With this option the colors of Kanjis will have three different styles for:
-- already reviewed Kanjis
-- Kanjis, that need to be reviewed
-- Kanjis, that are not in the deck
-
-Note: if you're only using the Kanji-deck as a database for kanji overlay, then you should deactivate this option. However you can change the style of the kanji
-
-How do I change the color-settings for the Kanji?
-Simply via css.
-- class: unknown 
+- class: unknown
 will change the style of values found in your deck and not yet reviewed
 
 - class: kol-missing
@@ -87,55 +79,23 @@ will change the style of values not found in your deck
 - class: kol
 will change the general style of kol and kanjis found in your deck and already reviewed
 
-b) Or by modify "Kanji Overlay.py"
+C.2 "template.hbs" in order to customize the overlay template
 
-Localise the "Profiles" Variable in the top of the file, which would look like that:
+You can customize the content of the overlay by coping the original template.hbs inside your user_files directory
+and modify it.
 
-----
+C.3 "scripts.js" in order to customize the javascript of the overlay
 
-Profiles = {
-	"DEFAULT" : { #Profile by default
-	    "KanjiUseCustomDeck" : False,
-	    "KanjiCustomDeckName" : u'日本語::漢字::RTK13',
-	    "KanjiCustomExpression" : "Kanji",
-	    "KanjiCustomKeyword" : "Keyword",
-	    "KanjiDisplayWithFuriganaMod" : True
-        "KanjiUseLink" : False,
-        "KanjiUseLinkUrl" : ''
-	},
-	"Other Profile Name" : { #Optional
-		...
-	}
-}
-----
-
-* "KanjiUseCustomDeck" : True or False; Activate Custom Decks
-* "KanjiCustomDeckName" : The full name of your kanji deck
-* "KanjiCustomExpression" : the name of the field containing the kanji
-* "KanjiCustomKeyword" : the name of the field containing the keyword
-* "KanjiDisplayWithFuriganaMod" : True or False; Activate Kanji OverLay for 
-   {{furigana:}} or {{kanji:}} tags in your templates. True by default.
-* "KanjiUseLink" : True or False; Activate link on a kanji
-* "KanjiUseLinkUrl" : Specify the url to open a link when you click a kanji if KanjiUseLink is set to True
-  for instance: http://tangorin.com/kanji/%s
-  The %s specify where you kanji is set in the url, so for instance if the kanji is 試
-  Then the url would be http://tangorin.com/kanji/試
-
-If the profile name of your account is not found, then Default is used.
-
-B.2 Add special tags in your template {{kol:}} tag (Kanji OverLay)
-
-You can activate Kanji OverLay on all fields using special {{kol:}} tag.
-For instance, {{kol:Expression}}
-
-----------------------------------------------------------------------------------------------
-C. Change the style of the pop-in
-
-You can change the style of the pop-in :
- - by editing the styles-kol.css in your plugin folder.
- - or by creating the styles-kol.css in your anki profile folder and making override there.
+You can customize the behavior of the overlay by coping the original scripts.js inside your user_files directory
+and modify it.
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#- CHANGES -#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+
+v0.2.2:
+- Refactor to make it for anki 2.1
+- Rewrite README to make it clearer
+- Add more field on yomi/kun yomi/heisig storyies to be display in overlay
+- Add configurable templates, styles and scripts
 
 v0.2.1:
 - Add an option to be able to add link that open a configurable url when you click on a kanji.
