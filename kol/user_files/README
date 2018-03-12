@@ -1,0 +1,5 @@
+Add here the following files to customize the plugin
+
+* styles.css: customize the style
+* template.hbs: customize the overlay template
+* scripts.js: customize the javascript of the overlay
