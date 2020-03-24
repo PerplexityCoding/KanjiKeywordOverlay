@@ -1,17 +1,18 @@
 import os
 import pickle
 
+from anki import hooks
+from aqt import gui_hooks
+
 from anki.cards import Card
-from anki.hooks import addHook
-from anki.template.template import Template
-from aqt import mw
+from aqt import mw, reviewer, clayout
 from aqt.utils import showInfo
 
+from kol.src.lib import pystache
 from kol.src import KolConfigDialog
 from kol.src.AnkiHelper import AnkiHelper
 from kol.src.KolConfigsManager import KolConfig, KolConfigsManager
 from kol.src.utils import log, readFile
-
 
 class KanjiOverlay:
     DEFAULT_PROFILE = KolConfig()
@@ -22,6 +23,7 @@ class KanjiOverlay:
     __saveCustomDict = False
     __CssClassOfNotReviewedKanji = "kol-unknown"
     __CssClassOfUnknownKanji = "kol-missing"
+    __renderer = pystache.Renderer()
 
     profile = None
 
@@ -171,18 +173,24 @@ class KanjiOverlay:
 
         if self.template == None:
             self.template = u""
+        else:
+            self.parsedTemplate = pystache.parse(self.template)
+
+    def __addFilters(self, field_text, field_name, filter_name, ctx):
+        log(filter_name)
+        if filter_name == "kol":
+            return self.injectKanjiOverlay(field_text)
+        else:
+            return field_text
 
     def __addHooks(self):
-        addHook("fmod_kol", self.injectKanjiOverlay)
-        if self.profile.kanjiDisplayWithFuriganaMod:
-            addHook("fmod_furigana", self.injectKanjiOverlay)
-            addHook("fmod_kanji", self.injectKanjiOverlay)
-        addHook('prepareQA', self.__prepareQA)
+        hooks.field_filter.append(self.__addFilters)
+        gui_hooks.webview_will_set_content.append(self.__appendScripts)
 
-    def __prepareQA(self, html, card, context):
-        html += self.css
-        html += self.scripts
-        return html
+    def __appendScripts(self, web_content, context):
+        if isinstance(context, reviewer.Reviewer) or isinstance(context, clayout.CardLayout):
+            web_content.head += self.css
+            web_content.body += self.scripts
 
     def __loadCss(self):
         try:
@@ -246,7 +254,7 @@ class KanjiOverlay:
         context["kanji"] = kanji
         context["kanjiLink"] = self.__getKanjiUrl(kanji)
 
-        return Template(self.template, context).render()
+        return self.__renderer.render(self.parsedTemplate, context)
 
     def __getValue(self, note, attr):
         if attr in note:

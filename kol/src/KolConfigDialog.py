@@ -115,7 +115,6 @@ class KolConfigDlg(QDialog):
             gui.cboMemoStory.setEditText(curProf.kanjiMemoStory)
 
             gui.chkUseCustomDeck.setChecked(curProf.kanjiCustomProfileEnabled)
-            gui.chkDisplayWithFuriganaMod.setChecked(curProf.kanjiDisplayWithFuriganaMod)
             gui.chkAlsoLoadDefaultDB.setChecked(curProf.kanjiLoadDefaultValuesForNonExistingValues)
             gui.chkColorizeKanjis.setChecked(curProf.kanjiShowColorsForKnownKanji)
             gui.chkKanjiLink.setChecked(curProf.kanjiUseLink)
@@ -160,7 +159,6 @@ class KolConfigDlg(QDialog):
             curProf.kanjiMemoStory = gui.cboMemoStory.currentText()
 
             curProf.kanjiCustomProfileEnabled = gui.chkUseCustomDeck.isChecked()
-            curProf.kanjiDisplayWithFuriganaMod = gui.chkDisplayWithFuriganaMod.isChecked()
             curProf.kanjiLoadDefaultValuesForNonExistingValues = gui.chkAlsoLoadDefaultDB.isChecked()
             curProf.kanjiShowColorsForKnownKanji = gui.chkColorizeKanjis.isChecked()
             curProf.kanjiUseLink = gui.chkKanjiLink.isChecked()

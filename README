@@ -34,6 +34,7 @@ your fields.
 
 If you have already japanese plugin installed, you probably already have {{furigana:Field}} or {{kanji:Field}}
 defined in your template.
+In that case, you should remplace them with {{kol:furigana:Field}} or {{kol:kanji:Field}}
 
 If it's not the case, you will need to add {{kol:Field}} for each field that you want the overlay to be displayed.
 By default, Kanji OverLay plugin use a predefined English Keywords set using Heisig.
@@ -90,6 +91,13 @@ You can customize the behavior of the overlay by coping the original scripts.js 
 and modify it.
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#- CHANGES -#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+
+v0.2.3:
+- Refactor to make it for anki 2.1.22
+- Update README
+- <!> Breaking change:
+    if you use {{furigana:Field}} or {{kanji:Field}} in your template,
+    then you need to change it to {{kol:furigana:Field}} or {{kol:kanji:Field}}
 
 v0.2.2:
 - Refactor to make it for anki 2.1

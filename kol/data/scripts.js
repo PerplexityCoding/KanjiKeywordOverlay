@@ -1,6 +1,5 @@
 (function ($) {
-
-    $('.kol-kanji').off('mouseenter').on('mouseenter', (e) => {
+    $("body").on('mouseenter', '.kol-kanji', (e) => {
         const $parent = $(e.currentTarget).closest('.kol');
         const $overlay = $parent.find('.kol-overlay');
         const windowWidth = $('body').outerWidth(true);
@@ -19,11 +18,9 @@
         $overlay.show();
     });
 
-    $('.kol-kanji').off('mouseleave').on('mouseleave', (e) => {
+    $("body").on('mouseleave', '.kol-kanji', (e) => {
         const $parent = $(e.currentTarget).closest('.kol');
         const $overlay = $parent.find('.kol-overlay');
-        $overlay.hide()
+        $overlay.hide();
     });
-
 })(window.$);
-

@@ -2,11 +2,13 @@
 
 # Form implementation generated from reading ui file 'kol/src/KolConfigGui.ui'
 #
-# Created by: PyQt5 UI code generator 5.10.1
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -130,10 +132,6 @@ class Ui_Dialog(object):
         self.verticalLayout_7 = QtWidgets.QVBoxLayout()
         self.verticalLayout_7.setContentsMargins(5, -1, 5, -1)
         self.verticalLayout_7.setObjectName("verticalLayout_7")
-        self.chkDisplayWithFuriganaMod = QtWidgets.QCheckBox(self.gpbAdvanced)
-        self.chkDisplayWithFuriganaMod.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.chkDisplayWithFuriganaMod.setObjectName("chkDisplayWithFuriganaMod")
-        self.verticalLayout_7.addWidget(self.chkDisplayWithFuriganaMod)
         self.chkAlsoLoadDefaultDB = QtWidgets.QCheckBox(self.gpbAdvanced)
         self.chkAlsoLoadDefaultDB.setObjectName("chkAlsoLoadDefaultDB")
         self.verticalLayout_7.addWidget(self.chkAlsoLoadDefaultDB)
@@ -199,7 +197,6 @@ class Ui_Dialog(object):
         self.chkKunYomi.setText(_translate("Dialog", "Field with kun yomi"))
         self.chkMemoStory.setText(_translate("Dialog", "Field with memo story"))
         self.gpbAdvanced.setTitle(_translate("Dialog", "Advanced"))
-        self.chkDisplayWithFuriganaMod.setText(_translate("Dialog", "enable Kanji Overlay for the furigana Plugin"))
         self.chkAlsoLoadDefaultDB.setText(_translate("Dialog", "show default values for not existing values \n"
 "(no differnent stlyes will be available then)"))
         self.chkColorizeKanjis.setText(_translate("Dialog", "change style for Kanji knowledge level"))
@@ -234,12 +231,6 @@ class Ui_Dialog(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">The Kanji overlay options you set are made for this Anki Profile. </span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">If you don\'t know, what a profile is, then you probably only have one and therefore don\'t need to care about this</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; text-decoration: underline;\">enable Kanji Overlay for the furigana Plugin</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">{{furigana:FIELDNAME}} </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Kanji Overlay will also be shown in that field.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">If you </span><span style=\" font-size:8pt; font-style:italic;\">don\'t</span><span style=\" font-size:8pt;\"> enable this option, then you need to write </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">{{</span><span style=\" font-size:8pt; font-weight:600;\">kol</span><span style=\" font-size:8pt;\">:FIELDNAME}}</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; text-decoration: underline;\">show default values for not existing values</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">If enabled, It will not only use your own deck as Kanji reference, but also the default database (if you enable this option, you don\'t have any color-overlay for unknown kanji)</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><br /></p>\n"
@@ -262,4 +253,3 @@ class Ui_Dialog(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">- class: kol</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">will change the general style of kol and kanjis found in your deck and already reviewed</span></p></body></html>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("Dialog", "Help - whats this?"))
-

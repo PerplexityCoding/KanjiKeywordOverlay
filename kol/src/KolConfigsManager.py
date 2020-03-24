@@ -18,7 +18,6 @@ class KolConfig():
                  kanjiMemoStory="",
                  kanjiMemoStoryEnabled=False,
                  kanjiCustomProfileEnabled=False,
-                 kanjiDisplayWithFuriganaMod=True,
                  kanjiLoadDefaultValuesForNonExistingValues=False,
                  kanjiShowColorsForKnownKanji=True,
                  kanjiUseLink=False,
@@ -35,7 +34,6 @@ class KolConfig():
         self.kanjiKunYomiEnabled = kanjiKunYomiEnabled
         self.kanjiMemoStory = kanjiMemoStory
         self.kanjiMemoStoryEnabled = kanjiMemoStoryEnabled
-        self.kanjiDisplayWithFuriganaMod = kanjiDisplayWithFuriganaMod
         self.kanjiLoadDefaultValuesForNonExistingValues = kanjiLoadDefaultValuesForNonExistingValues
         self.kanjiShowColorsForKnownKanji = kanjiShowColorsForKnownKanji
         self.kanjiUseLink = kanjiUseLink
