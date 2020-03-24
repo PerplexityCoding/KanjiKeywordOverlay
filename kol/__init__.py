@@ -14,7 +14,7 @@
 from anki.hooks import addHook
 from aqt import mw
 
-from kol.src.KolOverlay import KanjiOverlay
+from .src.KolOverlay import KanjiOverlay
 
 # ------------------------------------------------------------------------------
 # -------------------------   hooks  -------------------------------------------

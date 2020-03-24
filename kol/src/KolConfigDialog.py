@@ -4,8 +4,8 @@
 import sys
 from aqt.qt import QDialog, QApplication
 
-from kol.src import KolConfigGui
-from kol.src.KolConfigsManager import KolConfigsManager
+from . import KolConfigGui
+from .KolConfigsManager import KolConfigsManager
 
 class KolConfigDlg(QDialog):
     __gui = None

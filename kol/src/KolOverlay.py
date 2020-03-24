@@ -1,5 +1,6 @@
 import os
-import pickle
+import json
+from json import JSONEncoder
 
 from anki import hooks
 from aqt import gui_hooks
@@ -8,11 +9,11 @@ from anki.cards import Card
 from aqt import mw, reviewer, clayout
 from aqt.utils import showInfo
 
-from kol.src.lib import pystache
-from kol.src import KolConfigDialog
-from kol.src.AnkiHelper import AnkiHelper
-from kol.src.KolConfigsManager import KolConfig, KolConfigsManager
-from kol.src.utils import log, readFile
+from .lib import pystache
+from . import KolConfigDialog
+from .AnkiHelper import AnkiHelper
+from .KolConfigsManager import KolConfig, KolConfigsManager
+from .utils import log, readFile
 
 class KanjiOverlay:
     DEFAULT_PROFILE = KolConfig()
@@ -82,17 +83,19 @@ class KanjiOverlay:
         self.reload()
 
     def __setupObjectData(self):
-        self.kanjiDefaultDictPath = os.path.join(mw.pm.addonFolder(), "kol", "data", "english.db")
-        self.kanjiCustomDictPath = os.path.join(mw.pm.profileFolder(), "kol", "user_files", "custom-kol.db")
+        addon_package = mw.addonManager.addonFromModule(__name__)
 
-        self.cssFileInPlugin = os.path.join(mw.pm.addonFolder(), "kol", "data", "styles.css")
-        self.cssFileUserFiles = os.path.join(mw.pm.addonFolder(), "kol", "user_files", "styles.css")
+        self.kanjiDefaultDictPath = os.path.join(mw.pm.addonFolder(), addon_package, "data", "english.json.db")
+        self.kanjiCustomDictPath = os.path.join(mw.pm.addonFolder(), addon_package, "user_files", "custom-kol.json.db")
 
-        self.scriptsFileInPlugin = os.path.join(mw.pm.addonFolder(), "kol", "data", "scripts.js")
-        self.scriptsFileUserFiles = os.path.join(mw.pm.addonFolder(), "kol", "user_files", "scripts.js")
+        self.cssFileInPlugin = os.path.join(mw.pm.addonFolder(), addon_package, "data", "styles.css")
+        self.cssFileUserFiles = os.path.join(mw.pm.addonFolder(), addon_package, "user_files", "styles.css")
 
-        self.templateInPlugin = os.path.join(mw.pm.addonFolder(), "kol", "data", "template.hbs")
-        self.templateUserFiles = os.path.join(mw.pm.addonFolder(), "kol", "user_files", "template.hbs")
+        self.scriptsFileInPlugin = os.path.join(mw.pm.addonFolder(), addon_package, "data", "scripts.js")
+        self.scriptsFileUserFiles = os.path.join(mw.pm.addonFolder(), addon_package, "user_files", "scripts.js")
+
+        self.templateInPlugin = os.path.join(mw.pm.addonFolder(), addon_package, "data", "template.hbs")
+        self.templateUserFiles = os.path.join(mw.pm.addonFolder(), addon_package, "user_files", "template.hbs")
 
     def __loadKanjiDict(self):
         self.kanjiDict = dict()
@@ -117,19 +120,6 @@ class KanjiOverlay:
         else:
             self.kanjiDict = self.__loadDefaultKanjiDB()
 
-    # def __loadCustomKanjiDB(self):
-    #     if os.path.exists(self.kanjiCustomDictPath):
-    #         kanjiFile = open(self.kanjiCustomDictPath, "rb")
-    #         self.dlmod, self.nlmod, self.clmod, kanjiDict = pickle.load(kanjiFile)
-    #         deck = mw.col.decks.byName(self.profile.kanjiDeckName)
-    #         if (AnkiHelper.isDeckModified(self.dlmod, self.nlmod, self.clmod, deck)
-    #             or self.__alwaysLoadNewDictData):
-    #             kanjiDict = self.__createCustomDeck()
-    #     else:
-    #          kanjiDict = self.__createCustomDeck()
-    #
-    #     return kanjiDict
-
     def __createCustomDeck(self, save=False):
         log("__createCustomDeck")
 
@@ -138,11 +128,12 @@ class KanjiOverlay:
 
         deck = mw.col.decks.byName(self.profile.kanjiDeckName)
         cards = AnkiHelper.getCards(deck["id"])
+
         kanjiDict = dict()
         for card in cards:
             note = card.note
             try:
-                kanjiDict[note[self.profile.kanjiExpression]] = (note, card.ivl)
+                kanjiDict[note[self.profile.kanjiExpression]] = (note.items(), card.ivl)
             except:
                 continue
 
@@ -150,8 +141,8 @@ class KanjiOverlay:
         #self.nlmod, self.clmod = AnkiHelper.getLastModified(deck["id"])
 
         if save or KanjiOverlay.__saveCustomDict:
-            kanjiFile = open(self.kanjiCustomDictPath, "wb")
-            pickle.dump(kanjiDict, kanjiFile, 2)
+            kanjiFile = open(self.kanjiCustomDictPath, "w")
+            json.dump(kanjiDict, kanjiFile)
 
         return kanjiDict
 
@@ -161,7 +152,8 @@ class KanjiOverlay:
         if os.path.exists(self.kanjiDefaultDictPath) == False:
             raise Exception("Missing Default Dict")
         kanjiFile = open(self.kanjiDefaultDictPath, "rb")
-        kanjiDict = pickle.load(kanjiFile)
+        kanjiDict = json.load(kanjiFile)
+
         self.__defaultKanjiDict = kanjiDict
         return kanjiDict
 

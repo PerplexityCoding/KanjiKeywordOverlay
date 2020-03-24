@@ -5,10 +5,11 @@ import os
 from aqt import mw
 
 def log(msg):
-    logPath = os.path.join(mw.pm.addonFolder(), 'kol', 'main.log')
-    txt = '%s: %s' % (datetime.datetime.now(), msg)
-    f = codecs.open(logPath, 'a', 'utf-8')
-    f.write(txt + '\n')
+    addon_package = mw.addonManager.addonFromModule(__name__)
+    logPath =  os.path.join(mw.pm.addonFolder(), addon_package, "main.log")
+    txt = "%s: %s" % (datetime.datetime.now(), msg)
+    f = codecs.open(logPath, "a", "utf-8")
+    f.write(txt + "\n")
     f.close()
 
 def readFile(path):

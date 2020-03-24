@@ -3,7 +3,7 @@
 # -------------------------------------------------------------------------------
 from aqt import mw
 
-from kol.src.utils import log
+from .utils import log
 
 class KolConfig():
     def __init__(self,

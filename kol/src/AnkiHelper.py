@@ -3,7 +3,7 @@ from aqt import mw
 
 from anki.utils import joinFields, splitFields
 
-from kol.src.utils import log
+from .utils import log
 
 
 class AnkiCard:
