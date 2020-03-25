@@ -84,6 +84,7 @@ C.2 "template.hbs" in order to customize the overlay template
 
 You can customize the content of the overlay by coping the original template.hbs inside your user_files directory
 and modify it.
+You can display any fields from the kanji note inside the overlay. Just add it inside the div with the class kol-overlay.
 
 C.3 "scripts.js" in order to customize the javascript of the overlay
 
@@ -92,12 +93,14 @@ and modify it.
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#- CHANGES -#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
-v0.2.3:
+v0.3.0:
 - Refactor to make it for anki 2.1.22
-- Update README
 - <!> Breaking change:
     if you use {{furigana:Field}} or {{kanji:Field}} in your template,
     then you need to change it to {{kol:furigana:Field}} or {{kol:kanji:Field}}
+- Update README
+- Improve field selection in config
+- Improve custom templates: You can now display any field from your note in your custom templates
 
 v0.2.2:
 - Refactor to make it for anki 2.1

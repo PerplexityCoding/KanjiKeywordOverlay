@@ -78,6 +78,7 @@ class KanjiOverlay:
     def openConfigDialog(self):
         # for testing:
         # AnkiConnection = KolConfig.ankiConnectionMOCK()
+        log("open config dialog")
         KolConfigDialog.startUi(mw)
 
         self.reload()
@@ -224,12 +225,14 @@ class KanjiOverlay:
     def __createHtml(self, kanji):
         if kanji in self.kanjiDict:
             ankiNote, ivl = self.kanjiDict.get(kanji)
-            context = dict(ankiNote)
+            context = dict()
+            for i in ankiNote:
+                context[i[0]] = i[1]
 
             unkownClass = self.__CssClassOfNotReviewedKanji if ivl <= 0 and self.profile.kanjiCustomProfileEnabled else ""
-            context["class"] = unkownClass
+            context["kol-class"] = unkownClass
 
-            context["keyword"] = self.__getValue(context, self.profile.kanjiKeyword) or self.__getValue(context, "keyword")
+            context["kol-keyword"] = self.__getValue(context, self.profile.kanjiKeyword) or self.__getValue(context, "keyword")
 
             if self.profile.kanjiOnYomiEnabled:
                 context["kol-onYomi"] = self.__getValue(context, self.profile.kanjiOnYomi) or self.__getValue(context, "onYomi")
@@ -241,10 +244,10 @@ class KanjiOverlay:
                 context["kol-memoStory"] = self.__getValue(context, self.profile.kanjiMemoStory) or self.__getValue(context, "heisigStory")
         else:
             context = dict()
-            context["class"] = self.__CssClassOfUnknownKanji
+            context["kol-class"] = self.__CssClassOfUnknownKanji
 
-        context["kanji"] = kanji
-        context["kanjiLink"] = self.__getKanjiUrl(kanji)
+        context["kol-kanji"] = kanji
+        context["kol-kanjiLink"] = self.__getKanjiUrl(kanji)
 
         return self.__renderer.render(self.parsedTemplate, context)
 

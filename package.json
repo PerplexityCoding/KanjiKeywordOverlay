@@ -1,6 +1,6 @@
 {
   "name": "KanjiKeywordOverlay",
-  "version": "0.0.1",
+  "version": "0.3.0",
   "scripts": {
     "copy": "cp -r kol/* /c/Users/Gori/AppData/Roaming/Anki2/addons21/kol",
     "link": "ln -S /d/work/projects/KanjiKeywordOverlay/kol /c/Users/Gori/AppData/Roaming/Anki2/addons21/kol",

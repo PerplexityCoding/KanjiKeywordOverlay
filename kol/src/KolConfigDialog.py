@@ -2,9 +2,11 @@
 # -----------------------------   Dialog    -------------------------------------
 # -------------------------------------------------------------------------------
 import sys
-from aqt.qt import QDialog, QApplication
+from aqt.qt import QDialog, QApplication, QComboBox
 
+from .utils import log
 from . import KolConfigGui
+from .AnkiHelper import AnkiHelper
 from .KolConfigsManager import KolConfigsManager
 
 class KolConfigDlg(QDialog):
@@ -32,19 +34,27 @@ class KolConfigDlg(QDialog):
 
     def onLoad(self):
         # print("DEBUG: onLoad")
+        # log("on load")
+        if not self.__firstTimeShow:
+            return
+        self.__firstTimeShow = False
 
         # we don't want to be disturbed by GUI-Events during the load
         #   (they will appear as we fill the checkbox)
         # self.__guiUpdatingInProcess = True
 
         self.__kolConfigsManager = KolConfigsManager.getInstance()
-        self.__firstTimeShow = False
+
         # fill ComboBoxes
-        currentSelectedProfile = self.__fillCboProfileFromAnki(self.__ankiConnection)
-        self.__fillProfileDependendCbos(self.__ankiConnection, currentSelectedProfile)
+        currentSelectedProfile = self.__fillCboProfileFromAnki(self.__ankiConnection)        
 
         # now (at the end) we can load the current
         self.__updateGuiFromConfig(currentSelectedProfile)
+        self.__addEventListeners()
+
+    def __addEventListeners(self):
+        gui = self.__gui
+        gui.cboCustomDeckName.currentIndexChanged.connect(self.__fillDeckRelatedCbos)
 
     def __saveConfigsToFs(self):
         # print("DEBUG: safeConfigsToFs")
@@ -77,25 +87,38 @@ class KolConfigDlg(QDialog):
 
         return tmp2
 
-    def __fillProfileDependendCbos(self, anki, profilename):
+    def __fillDeckNameCbo(self, anki, profilename):
         # print("DEBUG: fillProfileDependedCbos")
         gui = self.__gui
 
         # clear
         gui.cboCustomDeckName.clear()
-        gui.cboCustomExpression.clear()
-        gui.cboCustomKeyword.clear()
-        gui.cboOnYomi.clear()
-        gui.cboKunYomi.clear()
-        gui.cboMemoStory.clear()
-
-        # fill
         gui.cboCustomDeckName.addItems(anki.getDeckNames(profilename))
-        gui.cboCustomExpression.addItems(anki.getAllFieldnames(profilename))
-        gui.cboCustomKeyword.addItems(anki.getAllFieldnames(profilename))
-        gui.cboOnYomi.addItems(anki.getAllFieldnames(profilename))
-        gui.cboKunYomi.addItems(anki.getAllFieldnames(profilename))
-        gui.cboMemoStory.addItems(anki.getAllFieldnames(profilename))
+
+    def __fillDeckRelatedCbos(self):
+        log("selects");
+        anki = self.__ankiConnection
+        gui = self.__gui
+
+        deckName = gui.cboCustomDeckName.currentText()
+        log(deckName)
+        fieldNames = anki.getFieldnames(deckName)
+        log(fieldNames)
+
+        gui.cboCustomExpression.clear()
+        gui.cboCustomExpression.addItems(fieldNames)
+
+        gui.cboCustomKeyword.clear()
+        gui.cboCustomKeyword.addItems(fieldNames)
+
+        gui.cboOnYomi.clear()
+        gui.cboOnYomi.addItems(fieldNames)
+
+        gui.cboKunYomi.clear()
+        gui.cboKunYomi.addItems(fieldNames)
+
+        gui.cboMemoStory.clear()
+        gui.cboMemoStory.addItems(fieldNames)
 
     def __updateGuiFromConfig(self, ProfileName):
         print("DEBUG: updateGuiFromConfig")
@@ -104,10 +127,12 @@ class KolConfigDlg(QDialog):
         curProf = self.__kolConfigsManager.getProfileByName(ProfileName)
 
         if (curProf != None):
-            self.__fillProfileDependendCbos(self.__ankiConnection, ProfileName)
-
-            # set all the other variables
+            self.__fillDeckNameCbo(self.__ankiConnection, curProf)           
             gui.cboCustomDeckName.setEditText(curProf.kanjiDeckName)
+            
+            self.__fillDeckRelatedCbos()
+            
+            # set all the other variables
             gui.cboCustomExpression.setEditText(curProf.kanjiExpression)
             gui.cboCustomKeyword.setEditText(curProf.kanjiKeyword)
             gui.cboOnYomi.setEditText(curProf.kanjiOnYomi)
@@ -224,7 +249,19 @@ class AnkiConnection:
         deckNames = self.__mw.col.decks.allNames()
         return deckNames
 
-    def getAllFieldnames(self, profilename):
+    def getFieldnames(self, deckName):
+        did = self.__mw.col.decks.id(deckName, False)
+        notes = AnkiHelper.getNotes(did)
+
+        allFieldNames = []
+        for note in notes:
+            for fieldName in note.keys():
+                if fieldName not in allFieldNames:
+                    allFieldNames.append(fieldName)
+
+        return allFieldNames
+
+    def getAllFieldnames(self):
         # Models = cardlayout (what and how many fields on a card)
         allFieldNamesFromAllModels = []
 
