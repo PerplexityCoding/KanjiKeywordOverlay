@@ -1,6 +1,6 @@
 ##############################################################################################
 
-                        Kanji OverLay v0.3.0 - Anki Plugin
+                        Kanji OverLay v0.3.1 - Anki Plugin
 						--------------------------------
 
 Git: https://github.com/fanatic84/KanjiKeywordOverlay.git
@@ -92,6 +92,9 @@ You can customize the behavior of the overlay by coping the original scripts.js 
 and modify it.
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#- CHANGES -#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+
+v0.3.1:
+- Fix issue when selecting parent decks for kanji custom deck
 
 v0.3.0:
 - Refactor to make it for anki 2.1.22
