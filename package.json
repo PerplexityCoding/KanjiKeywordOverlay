@@ -2,7 +2,7 @@
   "name": "KanjiKeywordOverlay",
   "version": "0.3.1",
   "scripts": {
-    "release": "sh -c 'npm version $VERSION' && npm run bundle && sh -c 'git tag $VERSION' && git push --tags",
+    "release": "sh -c 'npm version $VERSION' && npm run bundle && sh -c 'git tag $VERSION' && git push --tags && git push",
     "bundle": "npm run dist && cd dist/ && sh -c 'bestzip ../release/kol.$VERSION.ankiaddon *'",
     "dist": "rm -rf ./dist && mkdir dist && cp -r kol/* dist/ && rm dist/user_files/* ",
     "copy": "cp -r kol/* /c/Users/Gori/AppData/Roaming/Anki2/addons21/kol",
