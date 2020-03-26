@@ -11,8 +11,7 @@
 # Big thanks for Ricky for Adding GUI for the plugin
 #
 
-from anki.hooks import addHook
-from aqt import mw
+from aqt import mw, gui_hooks
 
 from .src.KolOverlay import KanjiOverlay
 
@@ -25,7 +24,7 @@ resetLog()
 # ------------------------------------------------------------------------------
 
 kanjiOverlay = KanjiOverlay()
-addHook("profileLoaded", kanjiOverlay.load)
-addHook("unloadProfile", kanjiOverlay.unload)
+gui_hooks.profile_did_open.append(kanjiOverlay.load)
+gui_hooks.profile_will_close.append(kanjiOverlay.unload)
 
 mw.addonManager.setConfigAction(__name__, kanjiOverlay.openConfigDialog)
