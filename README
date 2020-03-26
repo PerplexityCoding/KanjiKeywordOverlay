@@ -1,6 +1,6 @@
 ##############################################################################################
 
-                        Kanji OverLay v0.2.2 - Anki Plugin
+                        Kanji OverLay v0.3.0 - Anki Plugin
 						--------------------------------
 
 Git: https://github.com/fanatic84/KanjiKeywordOverlay.git
@@ -100,7 +100,7 @@ v0.3.0:
     then you need to change it to {{kol:furigana:Field}} or {{kol:kanji:Field}}
 - Update README
 - Improve field selection in config
-- Improve custom templates: You can now display any field from your note in your custom templates
+- Improve custom templates: You can now display any field from your kanji note in your custom templates
 
 v0.2.2:
 - Refactor to make it for anki 2.1
