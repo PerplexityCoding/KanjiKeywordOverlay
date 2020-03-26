@@ -2,6 +2,7 @@
 from aqt import mw
 
 from anki.utils import joinFields, splitFields
+from anki.utils import ids2str
 
 from .utils import log
 
@@ -48,11 +49,24 @@ class AnkiNote:
 
 
 class AnkiHelper:
+
+    @staticmethod
+    def getDidsFromName(name):
+        did = mw.col.decks.id(name, False)
+        if did == None:
+            return None
+        dids = [did]
+        for name, id in mw.col.decks.children(did):
+            dids.append(id)
+        return dids
     
     @staticmethod
-    def getCards(did):
+    def getCards(dids):
+        log("getCards")
+        log(ids2str(dids))
+
         rows = mw.col.db.all("Select c.ivl, n.id, n.flds, n.mid from cards c, notes n "
-                             "Where c.nid = n.id and c.did = ?", did)
+                             "Where c.nid = n.id and c.did in " + ids2str(dids))
         ankiCards = list()
         for row in rows:
             ankiCard = AnkiCard(row[0])
@@ -62,15 +76,14 @@ class AnkiHelper:
         return ankiCards
 
     @staticmethod
-    def getNotes(did):
+    def getNotes(dids):
         rows = mw.col.db.all("Select n.id, n.flds, n.mid from cards c, notes n "
-                             "Where c.nid = n.id and c.did = ?", did)
+                             "Where c.nid = n.id and c.did in " + ids2str(dids))
         ankiNotes = list()
         for row in rows:
             ankiNotes.append(AnkiNote(row[0], row[1], row[2]))
 
         return ankiNotes
-
 
     @staticmethod
     def isDeckModified(dlmod, nlmod, clmod, deck):

@@ -127,8 +127,10 @@ class KanjiOverlay:
         if self.profile and not self.profile.kanjiCustomProfileEnabled:
             return
 
-        deck = mw.col.decks.byName(self.profile.kanjiDeckName)
-        cards = AnkiHelper.getCards(deck["id"])
+        dids = AnkiHelper.getDidsFromName(self.profile.kanjiDeckName)
+        if dids == None:
+            return
+        cards = AnkiHelper.getCards(dids)
 
         kanjiDict = dict()
         for card in cards:
@@ -137,9 +139,6 @@ class KanjiOverlay:
                 kanjiDict[note[self.profile.kanjiExpression]] = (note.items(), card.ivl)
             except:
                 continue
-
-        #self.dlmod = deck["mod"]
-        #self.nlmod, self.clmod = AnkiHelper.getLastModified(deck["id"])
 
         if save or KanjiOverlay.__saveCustomDict:
             kanjiFile = open(self.kanjiCustomDictPath, "w")

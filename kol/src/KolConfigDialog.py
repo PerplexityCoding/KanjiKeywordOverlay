@@ -250,8 +250,10 @@ class AnkiConnection:
         return deckNames
 
     def getFieldnames(self, deckName):
-        did = self.__mw.col.decks.id(deckName, False)
-        notes = AnkiHelper.getNotes(did)
+        dids = AnkiHelper.getDidsFromName(deckName)
+        if dids == None:
+            return []
+        notes = AnkiHelper.getNotes(dids)
 
         allFieldNames = []
         for note in notes:
