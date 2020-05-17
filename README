@@ -1,6 +1,6 @@
 ##############################################################################################
 
-                        Kanji OverLay v0.3.2 - Anki Plugin
+                        Kanji OverLay v0.3.3 - Anki Plugin
 						--------------------------------
 
 Git: https://github.com/fanatic84/KanjiKeywordOverlay.git
@@ -92,6 +92,9 @@ You can customize the behavior of the overlay by coping the original scripts.js 
 and modify it.
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#- CHANGES -#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+
+v0.3.3:
+- Fix issue using multiple profile
 
 v0.3.2:
 - Fix kanji coloring not working
