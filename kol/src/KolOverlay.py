@@ -28,6 +28,9 @@ class KanjiOverlay:
 
     profile = None
 
+    def __init__(self):
+        self.__addHooks()
+
     @staticmethod
     def injectCss(card):
         return "<style>%s</style>" % KanjiOverlay.css + KanjiOverlay.oldCss(card)
@@ -45,7 +48,6 @@ class KanjiOverlay:
         self.__loadCss()
         self.__loadScripts()
         self.__loadTemplate()
-        self.__addHooks()
 
         log("End Load Plugin")
 
