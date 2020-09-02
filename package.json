@@ -10,6 +10,6 @@
     "generatePyui": "echo /c/Users/Gori/AppData/Local/Programs/Python/Python38-32/Scripts/pyuic5.exe kol/src/KolConfigGui.ui -o kol/src/KolConfigGui.py"
   },
   "devDependencies": {
-    "bestzip": "^2.1.5"
+    "bestzip": "^2.1.7"
   }
 }
