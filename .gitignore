@@ -3,3 +3,7 @@ dist
 release
 node_modules
 *.pyc
+kol/main.log
+kol/user_files
+kol/meta.json
+.vscode
