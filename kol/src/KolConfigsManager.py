@@ -5,24 +5,28 @@ from aqt import mw
 
 from .utils import log
 
-class KolConfig():
-    def __init__(self,
-                 profileName="DEFAULT",
-                 kanjiDeckName="",
-                 kanjiExpression="",
-                 kanjiKeyword="",
-                 kanjiOnYomi="",
-                 kanjiOnYomiEnabled=True,
-                 kanjiKunYomi="",
-                 kanjiKunYomiEnabled=True,
-                 kanjiMemoStory="",
-                 kanjiMemoStoryEnabled=False,
-                 kanjiCustomProfileEnabled=False,
-                 kanjiLoadDefaultValuesForNonExistingValues=False,
-                 kanjiShowColorsForKnownKanji=True,
-                 kanjiUseLink=False,
-                 kanjiUseLinkUrl=""):
 
+class KolConfig:
+    """Contais the settings for using this plugin for a single anki user."""
+
+    def __init__(
+        self,
+        profileName="DEFAULT",
+        kanjiDeckName="",
+        kanjiExpression="",
+        kanjiKeyword="",
+        kanjiOnYomi="",
+        kanjiOnYomiEnabled=True,
+        kanjiKunYomi="",
+        kanjiKunYomiEnabled=True,
+        kanjiMemoStory="",
+        kanjiMemoStoryEnabled=False,
+        kanjiCustomProfileEnabled=False,
+        kanjiLoadDefaultValuesForNonExistingValues=False,
+        kanjiShowColorsForKnownKanji=True,
+        kanjiUseLink=False,
+        kanjiUseLinkUrl="",
+    ):
         self.profileName = profileName
         self.kanjiCustomProfileEnabled = kanjiCustomProfileEnabled
         self.kanjiDeckName = kanjiDeckName
@@ -48,10 +52,11 @@ class KolConfig():
     def toDict(self):
         return self.__dict__
 
+
 class KolConfigs:
     VERSION = 5
 
-    def __init__(self, version = None, profiles = None):
+    def __init__(self, version=None, profiles=None):
         self.version = version if version != None else KolConfigs.VERSION
         self.allProfiles = self.createFromProfiles(profiles) if profiles else dict()
 
@@ -73,13 +78,10 @@ class KolConfigs:
         profiles = dict()
         for profilesName, profilesValue in self.allProfiles.items():
             profiles[profilesName] = profilesValue.__dict__
-        return {
-            'profiles': profiles,
-            'version': self.version
-        }
+        return {"profiles": profiles, "version": self.version}
+
 
 class KolConfigsManager:
-
     __instance = None
 
     @staticmethod
@@ -102,6 +104,7 @@ class KolConfigsManager:
 
     def save(self):
         config = self.kolConfigs.toDict()
+        # Calls to aqt to write the meta.json file.
         mw.addonManager.writeConfig(__name__, config)
 
     def getProfileByName(self, profileName):
@@ -112,8 +115,9 @@ class KolConfigsManager:
         return profile
 
     def __loadConfigsFromFs(self):
+        # Calls to aqt to read the meta.json file.
         config = mw.addonManager.getConfig(__name__)
-        kolConfigs = KolConfigs(profiles=config['profiles'], version=config['version'])
+        kolConfigs = KolConfigs(profiles=config["profiles"], version=config["version"])
         return kolConfigs
 
     def __addNewProfile(self, profilename):

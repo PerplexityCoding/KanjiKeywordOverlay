@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 #
 # Kanji Overlay Anki Plugin
 #
@@ -17,6 +17,7 @@ from .src.KolOverlay import KanjiOverlay
 
 # Clear logs
 from .src.utils import resetLog
+
 resetLog()
 
 # ------------------------------------------------------------------------------
@@ -26,5 +27,3 @@ resetLog()
 kanjiOverlay = KanjiOverlay()
 gui_hooks.profile_did_open.append(kanjiOverlay.load)
 gui_hooks.profile_will_close.append(kanjiOverlay.unload)
-
-mw.addonManager.setConfigAction(__name__, kanjiOverlay.openConfigDialog)

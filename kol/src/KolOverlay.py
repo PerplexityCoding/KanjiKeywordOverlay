@@ -10,10 +10,10 @@ from aqt import mw, reviewer, clayout
 from aqt.utils import showInfo
 
 from .lib import pystache
-from . import KolConfigDialog
 from .AnkiHelper import AnkiHelper
 from .KolConfigsManager import KolConfig, KolConfigsManager
 from .utils import log, readFile
+
 
 class KanjiOverlay:
     DEFAULT_PROFILE = KolConfig()
@@ -55,12 +55,12 @@ class KanjiOverlay:
         pass
 
     def reload(self):
-        #self.unload()
-        #oldValue = self.__alwaysLoadNewDictData
-        #self.__alwaysLoadNewDictData = True
-        #self.load()
+        # self.unload()
+        # oldValue = self.__alwaysLoadNewDictData
+        # self.__alwaysLoadNewDictData = True
+        # self.load()
         # restore old value
-        #self.__alwaysLoadNewDictData = oldValue
+        # self.__alwaysLoadNewDictData = oldValue
         log("reload start")
         self.__loadProfile()
         self.__loadKanjiDict()
@@ -73,32 +73,40 @@ class KanjiOverlay:
         if not self.profile.kanjiCustomProfileEnabled:
             self.profile = KanjiOverlay.DEFAULT_PROFILE
 
-        if (not (self.profile.kanjiShowColorsForKnownKanji)):
+        if not (self.profile.kanjiShowColorsForKnownKanji):
             self.__CssClassOfNotReviewedKanji = ""
             self.__CssClassOfUnknownKanji = ""
-
-    def openConfigDialog(self):
-        # for testing:
-        # AnkiConnection = KolConfig.ankiConnectionMOCK()
-        log("open config dialog")
-        KolConfigDialog.startUi(mw)
-
-        self.reload()
 
     def __setupObjectData(self):
         addon_package = mw.addonManager.addonFromModule(__name__)
 
-        self.kanjiDefaultDictPath = os.path.join(mw.pm.addonFolder(), addon_package, "data", "english.json.db")
-        self.kanjiCustomDictPath = os.path.join(mw.pm.addonFolder(), addon_package, "user_files", "custom-kol.json.db")
+        self.kanjiDefaultDictPath = os.path.join(
+            mw.pm.addonFolder(), addon_package, "data", "english.json.db"
+        )
+        self.kanjiCustomDictPath = os.path.join(
+            mw.pm.addonFolder(), addon_package, "user_files", "custom-kol.json.db"
+        )
 
-        self.cssFileInPlugin = os.path.join(mw.pm.addonFolder(), addon_package, "data", "styles.css")
-        self.cssFileUserFiles = os.path.join(mw.pm.addonFolder(), addon_package, "user_files", "styles.css")
+        self.cssFileInPlugin = os.path.join(
+            mw.pm.addonFolder(), addon_package, "data", "styles.css"
+        )
+        self.cssFileUserFiles = os.path.join(
+            mw.pm.addonFolder(), addon_package, "user_files", "styles.css"
+        )
 
-        self.scriptsFileInPlugin = os.path.join(mw.pm.addonFolder(), addon_package, "data", "scripts.js")
-        self.scriptsFileUserFiles = os.path.join(mw.pm.addonFolder(), addon_package, "user_files", "scripts.js")
+        self.scriptsFileInPlugin = os.path.join(
+            mw.pm.addonFolder(), addon_package, "data", "scripts.js"
+        )
+        self.scriptsFileUserFiles = os.path.join(
+            mw.pm.addonFolder(), addon_package, "user_files", "scripts.js"
+        )
 
-        self.templateInPlugin = os.path.join(mw.pm.addonFolder(), addon_package, "data", "template.hbs")
-        self.templateUserFiles = os.path.join(mw.pm.addonFolder(), addon_package, "user_files", "template.hbs")
+        self.templateInPlugin = os.path.join(
+            mw.pm.addonFolder(), addon_package, "data", "template.hbs"
+        )
+        self.templateUserFiles = os.path.join(
+            mw.pm.addonFolder(), addon_package, "user_files", "template.hbs"
+        )
 
     def __loadKanjiDict(self):
         self.kanjiDict = dict()
@@ -112,11 +120,13 @@ class KanjiOverlay:
                 customKanjiDict = self.__createCustomDeck()
                 self.kanjiDict.update(customKanjiDict)
             except Exception as e:
-                showInfo("Kanji Overlay Error: User defined Database could not be loaded." +
-                         " please check your settings. \nusing default Database instead")
+                showInfo(
+                    "Kanji Overlay Error: User defined Database could not be loaded."
+                    + " please check your settings. \nusing default Database instead"
+                )
 
                 self.kanjiDict = self.__loadDefaultKanjiDB()
-                if (self.__DEBUG__ShowExceptions):
+                if self.__DEBUG__ShowExceptions:
                     raise (e)
 
                 return
@@ -166,7 +176,7 @@ class KanjiOverlay:
             self.template = readFile(self.templateInPlugin)
 
         if self.template == None:
-            self.template = u""
+            self.template = ""
         else:
             self.parsedTemplate = pystache.parse(self.template)
 
@@ -182,7 +192,9 @@ class KanjiOverlay:
         gui_hooks.webview_will_set_content.append(self.__appendScripts)
 
     def __appendScripts(self, web_content, context):
-        if isinstance(context, reviewer.Reviewer) or isinstance(context, clayout.CardLayout):
+        if isinstance(context, reviewer.Reviewer) or isinstance(
+            context, clayout.CardLayout
+        ):
             web_content.head += self.css
             web_content.body += self.scripts
 
@@ -194,8 +206,8 @@ class KanjiOverlay:
                 cssInProfile = readFile(self.cssFileUserFiles)
                 css += cssInProfile
         except:
-            css = u""
-        self.css = '<style>' + css + '</style>'
+            css = ""
+        self.css = "<style>" + css + "</style>"
 
     def __loadScripts(self):
         try:
@@ -204,18 +216,19 @@ class KanjiOverlay:
             else:
                 scripts = readFile(self.scriptsFileInPlugin)
         except:
-            scripts = u""
-        self.scripts = '<script>' + scripts + '</script>'
+            scripts = ""
+        self.scripts = "<script>" + scripts + "</script>"
 
     def injectKanjiOverlay(self, txt, *args):
         def remap():
             for c in txt:
-                if c >= u"\u4E00" and c <= u"\u9FBF":  # Kanji
+                if c >= "\u4E00" and c <= "\u9FBF":  # Kanji
                     yield self.__createHtml(c)
                 else:
                     yield c
+
         return "".join([x for x in remap()])
-    
+
     def __getKanjiUrl(self, kanji):
         url = None
         if self.profile.kanjiUseLink:
@@ -230,19 +243,31 @@ class KanjiOverlay:
             for i in ankiNote:
                 context[i[0]] = i[1]
 
-            unkownClass = self.__CssClassOfNotReviewedKanji if ivl <= 0 and self.profile.kanjiCustomProfileEnabled else ""
+            unkownClass = (
+                self.__CssClassOfNotReviewedKanji
+                if ivl <= 0 and self.profile.kanjiCustomProfileEnabled
+                else ""
+            )
             context["kol-class"] = unkownClass
 
-            context["kol-keyword"] = self.__getValue(context, self.profile.kanjiKeyword) or self.__getValue(context, "keyword")
+            context["kol-keyword"] = self.__getValue(
+                context, self.profile.kanjiKeyword
+            ) or self.__getValue(context, "keyword")
 
             if self.profile.kanjiOnYomiEnabled:
-                context["kol-onYomi"] = self.__getValue(context, self.profile.kanjiOnYomi) or self.__getValue(context, "onYomi")
+                context["kol-onYomi"] = self.__getValue(
+                    context, self.profile.kanjiOnYomi
+                ) or self.__getValue(context, "onYomi")
 
             if self.profile.kanjiKunYomiEnabled:
-                context["kol-kunYomi"] = self.__getValue(context, self.profile.kanjiKunYomi) or self.__getValue(context, "kunYomi")
+                context["kol-kunYomi"] = self.__getValue(
+                    context, self.profile.kanjiKunYomi
+                ) or self.__getValue(context, "kunYomi")
 
             if self.profile.kanjiMemoStoryEnabled:
-                context["kol-memoStory"] = self.__getValue(context, self.profile.kanjiMemoStory) or self.__getValue(context, "heisigStory")
+                context["kol-memoStory"] = self.__getValue(
+                    context, self.profile.kanjiMemoStory
+                ) or self.__getValue(context, "heisigStory")
         else:
             context = dict()
             context["kol-class"] = self.__CssClassOfUnknownKanji
